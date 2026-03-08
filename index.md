@@ -10,7 +10,7 @@ Poseo un enfoque en **seguridad ofensiva, auditoría de redes y gestión de proy
 
 ## 🎓 Formación Académica Superior
 
-* **Máster Universitario en Ciberseguridad** - [Universidad Internacional de Valencia VIU (https://www.universidadviu.com/es/master-ciberseguridad)]
+* **Máster Universitario en Ciberseguridad** - [Universidad Internacional de Valencia VIU https://www.universidadviu.com/es/master-ciberseguridad]
 * *Distinción: Becario de la Organización de los Estados Americanos (OEA)* | 2026 - Presente
 
 
