@@ -12,7 +12,7 @@ Poseo un enfoque en **seguridad ofensiva, auditoría de redes y gestión de proy
 
 *Evidencia práctica de competencias técnicas y metodológicas:*
 
-### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://www.google.com/search?q=https://github.com/tu-usuario/gravemind-smb-lab)
+### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
 
 **Pentesting | Networking | Linux | Samba**
 
