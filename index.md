@@ -8,18 +8,14 @@ Poseo un enfoque en **seguridad ofensiva, auditoría de redes y gestión de proy
 
 ---
 
-## 🚀 Proyectos Destacados de Ciberseguridad
+## 🎓 Formación Académica Superior
 
-*Evidencia práctica de competencias técnicas y metodológicas:*
+* **Máster Universitario en Ciberseguridad** - [Universidad Internacional de Valencia (VIU)](https://www.universidadviu.com/)
+* *Distinción: Becario de la Organización de los Estados Americanos (OEA)* | 2026 - Presente
 
-### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
 
-**Pentesting | Networking | Linux | Samba**
-
-* **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
-* **Logros:** Identificación de vulnerabilidades de "Null Sessions", enumeración de usuarios reales mediante **RID Cycling** y validación de políticas de control de acceso.
-* **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
-* **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
+* **Grado en Ingeniería en Tecnologías de la Información** - Universidad Técnica Particular de Loja (UTPL)
+* *Título con validez internacional (Apostilla de La Haya).*
 
 ---
 
@@ -40,20 +36,20 @@ Poseo un sólido portafolio de formación continua en áreas críticas de tecnol
 * **🤝 Habilidades Directivas:**
 * Negociación Exitosa: Estrategias y Habilidades Esenciales – **University of Michigan**.
 
-
-
 ---
 
-## 🎓 Formación Académica Superior
+## 🚀 Proyectos Destacados de Ciberseguridad
 
-* **Máster Universitario en Ciberseguridad** - [Universidad Internacional de Valencia (VIU)](https://www.universidadviu.com/)
-* *Distinción: Becario de la Organización de los Estados Americanos (OEA)* | 2026 - Presente
+*Evidencia práctica de competencias técnicas y metodológicas:*
 
+### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
 
-* **Grado en Ingeniería en Tecnologías de la Información** - Universidad Técnica Particular de Loja (UTPL)
-* *Título con validez internacional (Apostilla de La Haya).*
+**Pentesting | Networking | Linux | Samba**
 
-
+* **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
+* **Logros:** Identificación de vulnerabilidades de "Null Sessions", enumeración de usuarios reales mediante **RID Cycling** y validación de políticas de control de acceso.
+* **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
+* **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
 
 ---
 
