@@ -62,10 +62,6 @@ Poseo un sólido portafolio de formación continua en áreas críticas de tecnol
 
 ---
 
-## 📈 Estadísticas de GitHub
-
----
-
 ## 🌐 Contacto Profesional
 
 * **📍 Ubicación:** España 🇪🇸
