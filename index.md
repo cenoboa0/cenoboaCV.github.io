@@ -56,5 +56,5 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 
 ### **CONTACTO**
 * 📍 **Ubicación:** España
-* ✉️ **Email:** cenoboa0@gmail.com
+* ✉️ **Email:** cenoboa2@gmail.com
 * 🔗 **LinkedIn:** [carlos-noboa-b72040369](https://www.linkedin.com/in/carlos-noboa-b72040369)
