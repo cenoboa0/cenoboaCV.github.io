@@ -1,4 +1,6 @@
-
+---
+layout: default
+---
 # CARLOS EDUARDO NOBOA GUERRERO
  [LinkedIn](https://www.linkedin.com/in/carlos-noboa-b72040369) | [GitHub](https://github.com/cenoboa0) | [Email](mailto:cenoboa2@gmail.com)
 
