@@ -23,17 +23,6 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 
 ---
 
-### **PROYECTOS DESTACADOS**
-
-#### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
-*Investigador de Seguridad / Pentester*
-* **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
-* **Logros:** Identificación de vulnerabilidades de "Null Sessions" y enumeración de usuarios reales mediante **RID Cycling**.
-* **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
-* **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
-
----
-
 ### **CERTIFICACIONES PROFESIONALES**
 
 **Ciberseguridad (Cisco Networking Academy)**
@@ -46,7 +35,16 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 * **Negociación:** Estrategias y Habilidades Esenciales (**University of Michigan**).
 
 ---
+### **PROYECTOS DESTACADOS**
 
+#### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
+*Investigador de Seguridad / Pentester*
+* **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
+* **Logros:** Identificación de vulnerabilidades de "Null Sessions" y enumeración de usuarios reales mediante **RID Cycling**.
+* **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
+* **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
+
+---
 ### **COMPETENCIAS TÉCNICAS (TECH STACK)**
 
 * **Sistemas Operativos:** Kali Linux, Debian, Windows Server.
