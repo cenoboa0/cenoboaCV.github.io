@@ -1,15 +1,2 @@
 # Información del sitio
 title: " "
-description: "Ingeniero en TI | Ciberseguridad Ofensiva | Pentesting & Project Management"
-
-# Configuración del Tema
-theme: jekyll-theme-minimal
-
-# Opciones de visualización
-show_downloads: false
-google_analytics: 
-
-# Datos del autor (ayuda a indexar mejor tu perfil)
-author:
-  name: Carlos Eduardo Noboa Guerrero
-  email: cenoboa2@gmail.com
