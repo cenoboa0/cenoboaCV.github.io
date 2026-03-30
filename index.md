@@ -37,12 +37,19 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 ---
 ### **PROYECTOS DESTACADOS**
 
-#### [🛡️ SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
+#### [SMB Penetration Testing Lab: Gravemind.vm](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
 *Investigador de Seguridad / Pentester*
 * **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
 * **Logros:** Identificación de vulnerabilidades de "Null Sessions" y enumeración de usuarios reales mediante **RID Cycling**.
 * **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
 * **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
+
+#### [NexusPlaza: Cyber Audit Scoping & RoE](https://github.com/cenoboa0/NexusPlaza-Cyber-Audit-Scoping-and-Rules-of-Engagement)
+*Auditor de Seguridad / GRC*
+* **Escenario:** Planificación estratégica y técnica de una auditoría de seguridad externa para una plataforma e-commerce.
+* **Logros:** Definición de activos críticos, establecimiento de Reglas de Compromiso (RoE) y protocolos de comunicación ética.
+* **Metodología:** Análisis de superficie de ataque (Reconocimiento) y cumplimiento normativo para auditorías de caja negra.
+* **Stack:** Nmap, GitHub, Frameworks de Auditoría Ética.
 
 ---
 ### **COMPETENCIAS TÉCNICAS (TECH STACK)**
