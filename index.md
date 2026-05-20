@@ -44,13 +44,21 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 * **Logros:** Identificación de vulnerabilidades de "Null Sessions" y enumeración de usuarios reales mediante **RID Cycling**.
 * **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
 * **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
-
+* 
+#### [Lab Source Code Disclosure via Backup Files](https://github.com/cenoboa0/Hacking-e-tico-/blob/main/An%C3%A1lisis%20de%20vulnerabilidades%20web/1.%20Lab%20Source%20Code%20Disclosure%20via%20Backup%20Files.md)
+*Auditor de Seguridad / GRC*
+* **Escenario:** Planificación estratégica y técnica de una auditoría de seguridad externa para una plataforma e-commerce.
+* **Logros:** Definición de activos críticos, establecimiento de Reglas de Compromiso (RoE) y protocolos de comunicación ética.
+* **Metodología:** Análisis de superficie de ataque (Reconocimiento) y cumplimiento normativo para auditorías de caja negra.
+* **Stack:** Nmap, GitHub, Frameworks de Auditoría Ética.
+* 
 #### [NexusPlaza: Cyber Audit Scoping & RoE](https://github.com/cenoboa0/NexusPlaza-Cyber-Audit-Scoping-and-Rules-of-Engagement)
 *Auditor de Seguridad / GRC*
 * **Escenario:** Planificación estratégica y técnica de una auditoría de seguridad externa para una plataforma e-commerce.
 * **Logros:** Definición de activos críticos, establecimiento de Reglas de Compromiso (RoE) y protocolos de comunicación ética.
 * **Metodología:** Análisis de superficie de ataque (Reconocimiento) y cumplimiento normativo para auditorías de caja negra.
 * **Stack:** Nmap, GitHub, Frameworks de Auditoría Ética.
+
 
 ---
 ### **COMPETENCIAS TÉCNICAS (TECH STACK)**
