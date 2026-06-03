@@ -75,12 +75,6 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 
 
 ---
-### **COMPETENCIAS TÉCNICAS (TECH STACK)**
-
-* **Sistemas Operativos:** Kali Linux, Debian, Windows Server.
-* **Herramientas de Auditoría:** Nmap, Enum4linux, Metasploit, Wireshark, SMBClient.
-* **Gestión de Proyectos:** Metodologías Ágiles, Planificación Estándar UCI, Liderazgo Técnico.
-* **Habilidades Blandas:** Negociación estratégica, comunicación asertiva, resolución de incidentes.
 
 ### **COMPETENCIAS TÉCNICAS (TECH STACK)**
 
