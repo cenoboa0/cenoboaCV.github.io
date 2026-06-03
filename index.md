@@ -74,6 +74,53 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 * **Stack:** Nmap, GitHub, Frameworks de Auditoría Ética.
 
 
+#### 1. Auditoría OSINT y Bypass de WAF en E-commerce
+*Herramientas y Técnicas:* OWASP Amass, Dig, crt.sh, OSINT Framework, enumeración pasiva y DNS fingerprinting.
+*Investigador de Seguridad / Pentester*
+* **Escenario:** Fase de reconocimiento pasivo y modelado de amenazas sobre la infraestructura digital de una organización de comercio electrónico con presencia consolidada para identificar vectores de exposición sin generar alertas en los sistemas defensivos.
+* **Logros:** Descubrimiento de una brecha estructural crítica por desvío del Web Application Firewall (Bypass de WAF), triangulación de la dirección IP física del servidor de origen en OVH y mapeo completo del stack tecnológico interno y la estructura organizacional mediante ingeniería social pasiva.
+* **Metodología:** Aplicación del marco estructurado OSINT Framework, técnicas de enumeración pasiva de subdominios (Certificate Transparency logs), análisis de infraestructura DNS y fingerprinting tecnológico perimetral.
+* **Stack:** Kali Linux, OWASP Amass, Whois, Dig, WhatWeb, HackerTarget, crt.sh.
+
+---
+
+#### 2. Análisis Estadístico y Automatización de Logs SSH en R
+*Herramientas y Técnicas:* RStudio, Data.Frames, Listas Heterogéneas, filtrado multivariable y programación funcional vectorizada.
+*Investigador de Seguridad / Científico de Datos de Red*
+* **Escenario:** Automatización de un entorno de trabajo reproducible y desarrollo de scripts en RStudio para la ingesta, manipulación y análisis estadístico exploratorio masivo de registros de acceso SSH (ssh_login_attempts-v2.csv) con el fin de modelar vectores de amenazas.
+* **Logros:** Procesamiento y limpieza de datos crudos de red para identificar el volumen neto de atacantes únicos y cuentas comprometidas, estructurando un ranquin jerárquico descendente de incidentes por dirección IP e implementando programación funcional vectorizada para optimizar auditorías de seguridad.
+* **Metodología:** Aplicación del ciclo de vida de la ciencia de datos (Ingesta local, Validación de tipado abstracto, Filtrado multivariable en estructuras complejas y Programación funcional vectorizada en CPU de un solo bloque).
+* **Stack:** R, RStudio, Tidyverse (Base R), Data.Frames, Listas Heterogéneas.
+
+---
+
+#### 3. Auditoría de Seguridad SMB y Enumeración en Linux
+*Herramientas y Técnicas:* Nmap, Enum4linux, SMBClient, explotación de Null Sessions y RID Cycling.
+*Investigador de Seguridad / Pentester*
+* **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
+* **Logros:** Identificación de vulnerabilidades de “Null Sessions” y enumeración de usuarios reales mediante RID Cycling.
+* **Metodología:** Aplicación del ciclo de vida del Pentesting (Reconocimiento, Enumeración, Explotación y Reporte técnico).
+* **Stack:** Kali Linux, Nmap, Enum4linux, SMBClient.
+
+---
+
+#### 4. Pentesting Web e Identificación de Credenciales Expuestas
+*Herramientas y Técnicas:* Burp Suite, análisis estático de código fuente, directory listing y deserialización con readObject().
+*Investigador de Vulnerabilidades Web / Information Disclosure*
+* **Escenario:** Identificación y explotación de un archivo de respaldo expuesto públicamente (ProductTemplate.java.bak) en un servidor web de producción.
+* **Logros:** Credenciales de conexión hardcodeadas para una base de datos PostgreSQL, extraídas del método readObject() del código fuente filtrado.
+* **Metodología:** Reconocimiento pasivo mediante robots.txt → enumeración de directorios (Directory Listing) → análisis estático de código fuente → exfiltración de credenciales.
+* **Stack:** Burp Suite · Firefox · Kali Linux · PortSwigger Web Security Academy
+
+---
+
+#### 5. Planificación y Definición de Alcance (GRC) para E-commerce
+*Herramientas y Técnicas:* Frameworks de Auditoría Ética, análisis de superficie de ataque y diseño de Reglas de Compromiso (RoE).
+*Auditor de Seguridad / GRC*
+* **Escenario:** Planificación estratégica y técnica de una auditoría de seguridad externa para una plataforma e-commerce.
+* **Logros:** Definición de activos críticos, establecimiento de Reglas de Compromiso (RoE) y protocolos de comunicación ética.
+* **Metodología:** Análisis de superficie de ataque (Reconocimiento) y cumplimiento normativo para auditorías de caja negra.
+* **Stack:** Nmap, GitHub, Frameworks de Auditoría Ética.
 ---
 
 ### **COMPETENCIAS TÉCNICAS (TECH STACK)**
