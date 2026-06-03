@@ -82,6 +82,14 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 * **Gestión de Proyectos:** Metodologías Ágiles, Planificación Estándar UCI, Liderazgo Técnico.
 * **Habilidades Blandas:** Negociación estratégica, comunicación asertiva, resolución de incidentes.
 
+### **COMPETENCIAS TÉCNICAS (TECH STACK)**
+
+* **Sistemas Operativos:** Kali Linux, Linux (Debian/Ubuntu), Windows Server.
+* **Herramientas de Auditoría & Pentesting:** Nmap, Burp Suite, Enum4linux, SMBClient, Metasploit, Wireshark, Firefox Developer Tools.
+* **OSINT & Reconocimiento:** OWASP Amass, OSINT Framework, Certificate Transparency Logs (crt.sh), Dig (DNS diagnostics), Whois, HackerTarget, WhatWeb (Fingerprinting perimetral).
+* **Ciencia de Datos & Data Mining (Seguridad):** Lenguaje R, RStudio, Análisis estadístico exploratorio de logs de acceso (SSH/Syslog), Programación funcional vectorizada, Data.Frames y manipulación de estructuras complejas.
+* **Gestión de Proyectos, GRC & Liderazgo:** Planificación estratégica de auditorías de caja negra, definición de Activos Críticos, redacción de Reglas de Compromiso (RoE), protocolos de comunicación ética, metodologías ágiles, control de versiones (GitHub) y liderazgo técnico.
+* **Habilidades Blandas:** Negociación estratégica para la definición del alcance, comunicación asertiva en reportes técnicos y ejecutivos, resolución analítica de incidentes y modelado asimétrico de amenazas.
 ---
 
 ### **CONTACTO**
