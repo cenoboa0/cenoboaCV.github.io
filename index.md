@@ -38,6 +38,13 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 ---
 ### **PROYECTOS DESTACADOS**
 
+#### [Auditoría OSINT y Reconocimiento Pasivo: Identificación de Superficie de Ataque y Evasión Perimetral](https://github.com/cenoboa0/OSINT-Reconnaissance-MadridHiFi.git)
+*Investigador de Seguridad / Pentester*
+* **Escenario:** Fase de reconocimiento pasivo y modelado de amenazas sobre la infraestructura digital de una organización de comercio electrónico con presencia consolidada para identificar vectores de exposición sin generar alertas en los sistemas defensivos.
+* **Logros:** Descubrimiento de una brecha estructural crítica por desvío del Web Application Firewall (Bypass de WAF), triangulación de la dirección IP física del servidor de origen en OVH y mapeo completo del stack tecnológico interno y la estructura organizacional mediante ingeniería social pasiva.
+* **Metodología:** Aplicación del marco estructurado OSINT Framework, técnicas de enumeración pasiva de subdominios (Certificate Transparency logs), análisis de infraestructura DNS y fingerprinting tecnológico perimetral.
+* **Stack:** Kali Linux, OWASP Amass, Whois, Dig, WhatWeb, HackerTarget, crt.sh.
+  
 #### [Auditoría de Seguridad SMB en Entorno Linux: Enumeración de Usuarios y Evaluación de Accesos No Autenticados](https://github.com/cenoboa0/EthicalHacking-Lab-Enum4linux.git)
 *Investigador de Seguridad / Pentester*
 * **Escenario:** Auditoría completa de un servidor Linux (Debian) con servicios SMB expuestos en un entorno simulado de Halo.
