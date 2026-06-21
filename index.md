@@ -52,7 +52,7 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 * **Metodología:** Aplicación del marco estructurado OSINT Framework, técnicas de enumeración pasiva de subdominios (Certificate Transparency logs), análisis de infraestructura DNS y fingerprinting tecnológico perimetral.
 * **Stack:** Kali Linux, OWASP Amass, Whois, Dig, WhatWeb, HackerTarget, crt.sh.
 
-  #### [Minería de Datos y Automatización en R: Análisis Estadístico de Incidentes de Seguridad SSH](https://github.com/cenoboa0/Monitorizacio-n-y-data-mining/blob/main/Ana%CC%81lisis%20Estadi%CC%81stico%20de%20Logs%20de%20Acceso%20SSH%20y%20Programacio%CC%81n%20en%20R.pdf)
+  #### [Minería de Datos y Automatización en R: Análisis Estadístico de Incidentes de Seguridad SSH](https://github.com/cenoboa0/Monitorizacio-n-y-data-mining/blob/main/Data%20Mining_Carlos_Noboa.pdf)
 *Investigador de Seguridad / Científico de Datos de Red*
 * **Escenario:** Automatización de un entorno de trabajo reproducible y desarrollo de scripts en RStudio para la ingesta, manipulación y análisis estadístico exploratorio masivo de registros de acceso SSH (`ssh_login_attempts-v2.csv`) con el fin de modelar vectores de amenazas.
 * **Logros:** Procesamiento y limpieza de datos crudos de red para identificar el volumen neto de atacantes únicos y cuentas comprometidas, estructurando un ranquin jerárquico descendente de incidentes por dirección IP e implementando programación funcional vectorizada para optimizar auditorías de seguridad.
