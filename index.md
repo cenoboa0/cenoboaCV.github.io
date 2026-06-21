@@ -38,6 +38,13 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 ---
 ### **PROYECTOS DESTACADOS**
 
+#### [Auditoría de Seguridad Ofensiva – Warzone VIU: CTF de Aplicaciones Web](https://github.com/cenoboa0)
+*Investigador de Seguridad / Pentester – Máster en Ciberseguridad, VIU*
+* **Escenario:** Evaluación de seguridad completa sobre la plataforma de entrenamiento CTF (*Capture the Flag*) de la Universidad Internacional de Valencia, compuesta por 9 laboratorios independientes que simulan vectores de ataque reales en aplicaciones web del dominio `viuciberseguridad.wsg127.com`.
+* **Logros:** Resolución del 100% de los laboratorios asignados con captura de todas las banderas (*flags*) disponibles. Explotación exitosa de vulnerabilidades XSS mediante técnicas avanzadas de evasión de filtros (JSFuck, codificación hexadecimal/HTML, *nested payloads*); elusión de mecanismos de autenticación a través de manipulación de tipos de dato PHP y deserialización insegura de cookies en Base64; exfiltración automatizada de credenciales mediante *Boolean-Based Blind SQL Injection* con script Python a medida; y obtención de credenciales válidas mediante ataque de diccionario con THC Hydra sobre un formulario sin *rate limiting*.
+* **Metodología:** Ciclo completo de pentesting web (Reconocimiento → Análisis de código fuente → Construcción de payload → Explotación → Documentación de evidencias), con trazabilidad total mediante interceptación y manipulación de tráfico HTTP en Burp Suite Repeater.
+* **Stack:** Kali Linux, Burp Suite, Python (`requests`), THC Hydra, Firefox Developer Tools.
+
 #### [Auditoría OSINT y Reconocimiento Pasivo: Identificación de Superficie de Ataque y Evasión Perimetral](https://github.com/cenoboa0/Hacking-e-tico-/blob/main/Hacking_Etico_Reconociemiento_Pasivo.pdf)
 *Investigador de Seguridad / Pentester*
 * **Escenario:** Fase de reconocimiento pasivo y modelado de amenazas sobre la infraestructura digital de una organización de comercio electrónico con presencia consolidada para identificar vectores de exposición sin generar alertas en los sistemas defensivos.
