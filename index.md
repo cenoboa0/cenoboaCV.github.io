@@ -38,7 +38,7 @@ Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad O
 ---
 ### **PROYECTOS DESTACADOS**
 
-#### [Auditoría de Seguridad Ofensiva – Warzone VIU: CTF de Aplicaciones Web](https://github.com/cenoboa0)
+#### [Auditoría de Seguridad Ofensiva – Warzone VIU: CTF de Aplicaciones Web](https://github.com/cenoboa0/Hacking-e-tico-/blob/main/WarZone_Carlos_Noboa.pdf)
 *Investigador de Seguridad / Pentester – Máster en Ciberseguridad, VIU*
 * **Escenario:** Evaluación de seguridad completa sobre la plataforma de entrenamiento CTF (*Capture the Flag*) de la Universidad Internacional de Valencia, compuesta por 9 laboratorios independientes que simulan vectores de ataque reales en aplicaciones web del dominio `viuciberseguridad.wsg127.com`.
 * **Logros:** Resolución del 100% de los laboratorios asignados con captura de todas las banderas (*flags*) disponibles. Explotación exitosa de vulnerabilidades XSS mediante técnicas avanzadas de evasión de filtros (JSFuck, codificación hexadecimal/HTML, *nested payloads*); elusión de mecanismos de autenticación a través de manipulación de tipos de dato PHP y deserialización insegura de cookies en Base64; exfiltración automatizada de credenciales mediante *Boolean-Based Blind SQL Injection* con script Python a medida; y obtención de credenciales válidas mediante ataque de diccionario con THC Hydra sobre un formulario sin *rate limiting*.
