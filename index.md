@@ -8,7 +8,7 @@ layout: default
 ---
 
 ### **PERFIL PROFESIONAL**
-Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad Ofensiva y Gestión de Proyectos**. Experiencia técnica en auditoría de redes, pentesting y respuesta ante incidentes, complementada con una visión estratégica en planificación y negociación certificada por instituciones globales. Becario de la OEA, enfocado en la protección de activos críticos y la optimización de infraestructuras IT.
+Ingeniero en Tecnologías de la Información especializado en **Ciberseguridad y Gestión de Proyectos**. Experiencia técnica en auditoría de redes, pentesting y respuesta ante incidentes, complementada con una visión estratégica en planificación y negociación certificada por instituciones globales. Becario de la OEA, enfocado en la protección de activos críticos y la optimización de infraestructuras IT.
 
 ---
 
