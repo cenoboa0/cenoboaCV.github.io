@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carlos Eduardo Noboa Guerrero — Expediente Profesional</title>
 <meta name="description" content="Ingeniero en Ciberseguridad — pentesting, OSINT y análisis de datos de seguridad.">
+<link rel="alternate" hreflang="es" href="index-es.html">
+<link rel="alternate" hreflang="en" href="index-en.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -49,10 +51,13 @@
     border-bottom:2px solid var(--ink);
   }
   nav.tabs .wrap{
-    display:flex;gap:2px;overflow-x:auto;padding:0 28px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 28px;
+  }
+  nav.tabs .tabs-scroll{
+    display:flex;gap:2px;overflow-x:auto;
     scrollbar-width:none;
   }
-  nav.tabs .wrap::-webkit-scrollbar{display:none;}
+  nav.tabs .tabs-scroll::-webkit-scrollbar{display:none;}
   nav.tabs a{
     flex:0 0 auto;
     font-family:var(--mono);
@@ -64,6 +69,19 @@
   }
   nav.tabs a span{color:var(--accent-amber);margin-right:6px;}
   nav.tabs a:hover, nav.tabs a:focus-visible{color:#fff;border-bottom-color:var(--accent-amber);}
+
+  /* ---------- language switcher ---------- */
+  .lang-switch{
+    flex:0 0 auto;
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+    color:#C9CDC7;text-decoration:none;
+    padding:6px 12px;border:1.5px solid #3A444C;border-radius:999px;
+    white-space:nowrap;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .lang-switch:hover, .lang-switch:focus-visible{color:#fff;border-color:var(--accent-amber);background:rgba(185,128,14,.12);}
+  .lang-switch .flag{width:18px;height:13px;border-radius:2px;flex:0 0 auto;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.15);}
 
   /* ---------- hero / cover sheet ---------- */
   header.cover{
@@ -290,12 +308,24 @@
 
 <nav class="tabs" aria-label="Secciones del expediente">
   <div class="wrap">
-    <a href="#perfil"><span>01</span>Perfil</a>
-    <a href="#educacion"><span>02</span>Educación</a>
-    <a href="#certificaciones"><span>03</span>Certificaciones</a>
-    <a href="#casos"><span>04</span>Casos</a>
-    <a href="#stack"><span>05</span>Stack</a>
-    <a href="#contacto"><span>06</span>Contacto</a>
+    <div class="tabs-scroll">
+      <a href="#perfil"><span>01</span>Perfil</a>
+      <a href="#educacion"><span>02</span>Educación</a>
+      <a href="#certificaciones"><span>03</span>Certificaciones</a>
+      <a href="#casos"><span>04</span>Casos</a>
+      <a href="#stack"><span>05</span>Stack</a>
+      <a href="#contacto"><span>06</span>Contacto</a>
+    </div>
+    <a class="lang-switch" href="index-en.html" hreflang="en" aria-label="Switch to English version">
+      <svg class="flag" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect width="30" height="20" fill="#00247D"/>
+        <path d="M0 0 L30 20 M30 0 L0 20" stroke="#FFF" stroke-width="4"/>
+        <path d="M0 0 L30 20 M30 0 L0 20" stroke="#CF142B" stroke-width="2"/>
+        <path d="M15 0 V20 M0 10 H30" stroke="#FFF" stroke-width="6"/>
+        <path d="M15 0 V20 M0 10 H30" stroke="#CF142B" stroke-width="3.5"/>
+      </svg>
+      EN
+    </a>
   </div>
 </nav>
 
