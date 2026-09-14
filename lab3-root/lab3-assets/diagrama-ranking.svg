@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="900" height="460" fill="#F3F3EF"/>
+
+  <!-- raw log block -->
+  <g>
+    <rect x="40" y="60" width="230" height="150" rx="4" fill="#12181D"/>
+    <text x="155" y="90" text-anchor="middle" fill="#8FE3C7" font-size="11" font-weight="700">LOG CRUDO</text>
+    <text x="60" y="112" fill="#6b7278" font-size="9">root 20.187.88.188 59126</text>
+    <text x="60" y="128" fill="#6b7278" font-size="9">leonardo 161.82.233.179 44304</text>
+    <text x="60" y="144" fill="#6b7278" font-size="9">master 49.234.24.246 50730</text>
+    <text x="60" y="160" fill="#6b7278" font-size="9">root 183.88.189.109 50401</text>
+    <text x="60" y="176" fill="#6b7278" font-size="9">root 154.221.19.60 53614</text>
+    <text x="60" y="192" fill="#8A9299" font-size="9">... 87,622 líneas más</text>
+  </g>
+
+  <!-- arrow with gear -->
+  <g>
+    <path d="M280,135 L400,135" stroke="#B9800E" stroke-width="2.5" fill="none" marker-end="url(#arrowAmber)"/>
+    <text x="340" y="120" text-anchor="middle" fill="#B9800E" font-size="10" font-weight="700">R + vectorización</text>
+  </g>
+
+  <!-- ranked table -->
+  <g>
+    <rect x="410" y="40" width="450" height="200" rx="4" fill="#F3F3EF" stroke="#12181D" stroke-width="1.5"/>
+    <text x="430" y="65" fill="#12181D" font-size="12" font-weight="700">RANKING DE ORIGEN (descendente)</text>
+
+    <rect x="430" y="80" width="34" height="18" fill="#9C3B2E"/>
+    <text x="472" y="94" fill="#242B31" font-size="11">Atacante 1 — 42 intentos</text>
+    <rect x="700" y="80" width="140" height="14" fill="#9C3B2E"/>
+
+    <rect x="430" y="105" width="34" height="18" fill="#B9800E"/>
+    <text x="472" y="119" fill="#242B31" font-size="11">Atacante 2 — 31 intentos</text>
+    <rect x="700" y="105" width="103" height="14" fill="#B9800E"/>
+
+    <rect x="430" y="130" width="34" height="18" fill="#B9800E"/>
+    <text x="472" y="144" fill="#242B31" font-size="11">Atacante 3 — 30 intentos</text>
+    <rect x="700" y="130" width="100" height="14" fill="#B9800E"/>
+
+    <rect x="430" y="155" width="34" height="18" fill="#1E7F72"/>
+    <text x="472" y="169" fill="#242B31" font-size="11">Atacante 4 — 30 intentos</text>
+    <rect x="700" y="155" width="100" height="14" fill="#1E7F72"/>
+
+    <text x="430" y="200" fill="#5B6570" font-size="10">... 46 orígenes más, todos con menos intentos</text>
+    <text x="430" y="220" fill="#5B6570" font-size="10">que el top 4 &mdash; ahí se concentra el riesgo real</text>
+  </g>
+
+  <!-- bottom summary strip -->
+  <g>
+    <rect x="40" y="300" width="820" height="110" rx="4" fill="#1B232B"/>
+    <text x="70" y="330" fill="#fff" font-size="13" font-weight="700">50</text>
+    <text x="70" y="348" fill="#9BA3AB" font-size="9">IPs distintas</text>
+
+    <text x="280" y="330" fill="#fff" font-size="13" font-weight="700">453</text>
+    <text x="280" y="348" fill="#9BA3AB" font-size="9">usuarios distintos probados</text>
+
+    <text x="500" y="330" fill="#fff" font-size="13" font-weight="700">87,622</text>
+    <text x="500" y="348" fill="#9BA3AB" font-size="9">líneas de log procesadas</text>
+
+    <text x="720" y="330" fill="#fff" font-size="13" font-weight="700">4</text>
+    <text x="720" y="348" fill="#9BA3AB" font-size="9">orígenes prioritarios</text>
+
+    <text x="70" y="380" fill="#8FE3C7" font-size="9.5">Sin automatizar este paso, un equipo humano revisando fila por fila</text>
+    <text x="70" y="394" fill="#8FE3C7" font-size="9.5">nunca llegaría a ver este patrón a tiempo.</text>
+  </g>
+
+  <defs>
+    <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#B9800E"/></marker>
+  </defs>
+
+  <text x="450" y="440" text-anchor="middle" fill="#5B6570" font-size="10.5">Datos de un dataset de práctica académica (ssh_login_attempts-v2.csv) — sin infraestructura real involucrada.</text>
+</svg>
