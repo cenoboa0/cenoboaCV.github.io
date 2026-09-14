@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reconocimiento OSINT, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa el ejercicio de ciberseguridad de reconocimiento pasivo (OSINT), explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;flex-wrap:wrap;gap:8px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 22px;}
+  .anon-note{
+    font-family:var(--mono);font-size:.74rem;color:#8A9299;max-width:640px;margin:0 0 28px;
+    border-left:2px solid var(--accent-amber);padding-left:12px;
+  }
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;margin-bottom:32px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* terminal ticker (same behavior as the main portfolio page) */
+  .ticker{
+    background:#0B1116;border:1px solid #2A343C;border-radius:6px;
+    padding:14px 16px;font-family:var(--mono);font-size:.8rem;color:#8FE3C7;
+    max-width:640px;
+  }
+  .ticker .dots{display:flex;gap:6px;margin-bottom:10px;}
+  .ticker .dots span{width:9px;height:9px;border-radius:50%;background:#3A444C;}
+  .ticker pre{margin:0;white-space:pre-wrap;min-height:2.4em;}
+  .ticker .cursor{display:inline-block;width:7px;background:#8FE3C7;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);background:#F3F3EF;}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* finding blocks */
+  .finding{border-left:4px solid var(--rule);padding-left:26px;}
+  .finding.c-teal{border-left-color:var(--accent-teal);}
+  .finding.c-red{border-left-color:var(--accent-red);}
+  .finding.c-amber{border-left-color:var(--accent-amber);}
+  .finding .eyebrow.c-teal{color:var(--accent-teal);}
+  .finding .eyebrow.c-red{color:var(--accent-red);}
+  .finding .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.risk{border-left:3px solid var(--accent-red);}
+  .callout.fix{border-left:3px solid var(--accent-teal);}
+
+  /* platform / evidence panel (dark) */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+  .platform-panel figcaption{color:#8A9299;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .finding{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticker .cursor{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 02</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS &mdash; CEO / RRHH</p>
+    <h1 class="name">Lo que un extraño puede saber de tu empresa sin tocarla</h1>
+    <p class="lede">Como práctica del Máster en Ciberseguridad de la VIU, se realizó una auditoría de reconocimiento pasivo (OSINT) sobre una tienda online de tamaño medio, para comprobar cuánta información sensible puede reunirse desde fuera &mdash;sin enviar un solo ataque ni tocar un solo sistema&mdash; usando únicamente fuentes públicas de Internet.</p>
+    <p class="anon-note">Nota: el nombre, el dominio, las direcciones IP y los datos de personas de la organización analizada se muestran aquí anonimizados o genéricos. Lo que no ha cambiado es el tipo de hallazgo ni su gravedad.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">0</span><span class="l">Alertas generadas</span></div>
+      <div class="stat"><span class="n">4</span><span class="l">Tipos de exposición</span></div>
+      <div class="stat"><span class="n">~50%</span><span class="l">Plantilla con huella pública</span></div>
+    </div>
+
+    <div class="ticker">
+      <div class="dots"><span></span><span></span><span></span></div>
+      <pre id="tickerText"></pre>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El ejercicio</p>
+      <h2 class="section-title">Nadie tocó ningún sistema, y aun así se supo casi todo</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">El reconocimiento pasivo (OSINT) es la fase previa a cualquier ataque real: consiste en reunir toda la información posible sobre un objetivo usando solo fuentes públicas &mdash;registros de dominio, redes sociales, certificados de seguridad&mdash; sin enviar una sola petición sospechosa que pueda hacer saltar una alarma.</p>
+        <p style="margin:0;">Es el equivalente a que alguien averigüe el horario de tu negocio, quién lo dirige y por dónde entra el suministro, simplemente mirando desde la acera. No ha roto nada, pero ya sabe por dónde entrar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="waf-bypass">
+    <div class="wrap">
+      <div class="finding c-teal">
+        <p class="eyebrow c-teal">Hallazgo 1 &mdash; Escudo con huecos</p>
+        <h2 class="section-title">El firewall protegía la puerta principal, pero no las ventanas laterales</h2>
+        <div class="prose">
+          <p>La web principal de la empresa estaba correctamente protegida por un escudo de seguridad (un firewall de aplicaciones web) que filtra el tráfico antes de que llegue al servidor real. El problema no estuvo en ese escudo, sino en que otras puertas de la misma casa &mdash;un entorno de pruebas, un panel de gestión interno, la pasarela de pagos&mdash; apuntaban directamente a la dirección real del servidor, sin pasar por ese filtro en absoluto.</p>
+        </div>
+        <figure>
+          <img src="lab2-assets/diagrama-bypass.svg" alt="Diagrama mostrando cómo un subdominio sin protección expone la dirección real del servidor, evitando el firewall del dominio principal">
+          <figcaption>El dominio principal está protegido; un subdominio secundario (entorno de pruebas o pasarela de pagos) apunta directo al servidor real, sin pasar por ese mismo filtro.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para la empresa</p>
+          <p>Da igual cuánto se invierta en el escudo de seguridad de la web principal si hay una puerta lateral sin vigilancia: un atacante no necesita romper nada, solo encontrar la puerta que ya está abierta y que suele ser, precisamente, la que gestiona pagos o datos internos.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Auditar todos los subdominios de la empresa, no solo la web principal, y asegurarse de que los entornos de pruebas y las pasarelas críticas queden igual de protegidos &mdash;o completamente fuera del alcance público.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mapa-interno">
+    <div class="wrap">
+      <div class="finding c-amber">
+        <p class="eyebrow c-amber">Hallazgo 2 &mdash; El mapa de la casa, disponible sin pedirlo</p>
+        <h2 class="section-title">Antes de intentar nada, ya se sabía qué sistemas usaba la empresa por dentro</h2>
+        <div class="prose">
+          <p>Con herramientas públicas y gratuitas de enumeración de dominios, se reconstruyó un inventario detallado de la infraestructura interna: entornos de desarrollo, un panel de administración, y la tecnología exacta detrás de la tienda online &mdash;todo sin generar una sola alerta, porque consultar registros públicos no es, técnicamente, un ataque.</p>
+        </div>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para la empresa</p>
+          <p>Esta información convierte a cualquier persona con conocimientos básicos en alguien con el mismo nivel de detalle que un empleado del departamento de sistemas, antes incluso de intentar entrar en ningún sitio.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Tratar la simple visibilidad pública de la infraestructura como un riesgo en sí mismo, no como un detalle menor: cuanto menos se pueda averiguar desde fuera sobre los sistemas internos, menos preparado llega un posible atacante.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="perfil-empleado">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Hallazgo 3 &mdash; El manual técnico, publicado sin querer</p>
+        <h2 class="section-title">Un perfil profesional bien redactado contó toda la arquitectura interna</h2>
+        <div class="prose">
+          <p>El perfil público de un empleado del área técnica, pensado para lucir bien ante futuros reclutadores, describía con detalle un proyecto real: qué lenguajes de programación, bases de datos y herramientas usa la empresa en producción actualmente. Nada de eso se obtuvo hackeando nada &mdash;estaba a la vista de cualquiera.</p>
+        </div>
+        <figure>
+          <img src="lab2-assets/diagrama-organigrama.svg" alt="Diagrama de organigrama con perfiles públicos identificados en redes profesionales, resaltando la exposición del personal">
+          <figcaption>Cuantos más perfiles del personal técnico y directivo son públicos, más detallado es el mapa que un extraño puede reconstruir sobre la empresa.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para la empresa</p>
+          <p>Este tipo de información no se filtra por un fallo de seguridad, sino por una costumbre normal y bienintencionada: mostrar experiencia. El problema es que, sumada a otros datos, le da a un atacante el equivalente a una visita guiada por el backend.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>No se trata de prohibir que el personal muestre su trabajo, sino de revisar como empresa qué nivel de detalle técnico es razonable tener público, especialmente en perfiles vinculados directamente a la marca.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="organigrama">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Hallazgo 4 &mdash; El organigrama completo, listo para un correo falso</p>
+        <h2 class="section-title">Con nombres, cargos y el patrón de correo, cualquiera puede escribir &ldquo;de parte del CEO&rdquo;</h2>
+        <div class="prose">
+          <p>Cruzando los perfiles públicos del personal (nombre, cargo, en algunos casos foto) con un par de direcciones de correo corporativo ya conocidas, fue posible deducir el patrón exacto con el que la empresa construye sus correos electrónicos &mdash;y, con eso, reconstruir un directorio casi completo, dirección general incluida.</p>
+        </div>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para Recursos Humanos</p>
+          <p>Esta es exactamente la materia prima de los fraudes de suplantación del CEO, el phishing dirigido y las estafas de nómina: alguien que sabe el nombre exacto del director, su correo, y quién trabaja en qué departamento, puede hacerse pasar por él de forma convincente. Es un riesgo de personas, no solo de sistemas &mdash;y por eso es un tema que compete directamente a RRHH, no solo a TI.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Reducir cuánta estructura organizativa y qué correos directos de dirección quedan públicamente visibles; formar al personal &mdash;especialmente a quienes gestionan pagos o nóminas&mdash; con ejemplos reales de este tipo de engaño; exigir un segundo canal de verificación para cualquier instrucción sensible recibida por correo, venga de quien venga.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Por qué esto importa aunque nadie haya intentado entrar todavía</h2>
+      <div class="prose">
+        <p>Ninguno de estos hallazgos requirió lanzar un solo ataque, adivinar una contraseña o explotar una vulnerabilidad técnica: toda la información se obtuvo de fuentes abiertas y gratuitas, sin que la empresa lo notara ni pudiera detectarlo. Ese es justamente el punto: la fase de reconocimiento pasivo no aparece en ningún registro de seguridad, pero deja a quien la realiza con un nivel de conocimiento equivalente al de alguien con acceso interno &mdash;antes de que la fase activa siquiera empiece.</p>
+      </div>
+      <p class="score-line">4 categorías de exposición documentadas &middot; 0 alertas generadas durante el reconocimiento &middot; recomendaciones de mitigación entregadas para cada una</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Carlos E. Noboa Guerrero, Máster en Ciberseguridad, VIU. Ejercicio académico con fines educativos &mdash; datos de la organización analizada anonimizados en esta página.</p>
+  </div>
+</footer>
+
+<script>
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var lines = [
+    "$ whois <dominio-objetivo>\n> registrador y fechas clave obtenidas — sin alertar al objetivo",
+    "$ amass enum -passive -d <dominio-objetivo>\n> subdominios internos y entornos de prueba expuestos",
+    "$ crt.sh <dominio-objetivo>\n> certificados vigentes confirman pasarela de pagos activa",
+    "$ revisión de perfiles públicos del personal\n> patrón de correo corporativo inferido"
+  ];
+  var tickerEl = document.getElementById('tickerText');
+  var li = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    if(reduceMotion){
+      tickerEl.textContent = lines[0];
+      return;
+    }
+    var current = lines[li];
+    if(!deleting){
+      ci++;
+      tickerEl.innerHTML = current.slice(0, ci).replace(/\n/g,'<br>') + '<span class="cursor">&nbsp;</span>';
+      if(ci >= current.length){ deleting = true; setTimeout(typeLoop, 1600); return; }
+    } else {
+      ci--;
+      tickerEl.innerHTML = current.slice(0, ci).replace(/\n/g,'<br>') + '<span class="cursor">&nbsp;</span>';
+      if(ci <= 0){ deleting = false; li = (li + 1) % lines.length; }
+    }
+    setTimeout(typeLoop, deleting ? 18 : 32);
+  }
+  typeLoop();
+</script>
+
+</body>
+</html>

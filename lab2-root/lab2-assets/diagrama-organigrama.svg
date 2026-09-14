@@ -1,0 +1,65 @@
+<svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="900" height="480" fill="#F3F3EF"/>
+
+  <!-- CEO box -->
+  <rect x="360" y="30" width="180" height="58" rx="5" fill="#12181D"/>
+  <text x="450" y="55" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">DIRECCIÓN GENERAL</text>
+  <text x="450" y="74" text-anchor="middle" fill="#B9800E" font-size="10">nombre.publico@empresa.com</text>
+
+  <!-- lines down -->
+  <path d="M450,88 L450,110" stroke="#c7c9c0" stroke-width="2"/>
+  <path d="M180,110 L720,110" stroke="#c7c9c0" stroke-width="2"/>
+  <path d="M180,110 L180,132" stroke="#c7c9c0" stroke-width="2"/>
+  <path d="M360,110 L360,132" stroke="#c7c9c0" stroke-width="2"/>
+  <path d="M540,110 L540,132" stroke="#c7c9c0" stroke-width="2"/>
+  <path d="M720,110 L720,132" stroke="#c7c9c0" stroke-width="2"/>
+
+  <!-- departments -->
+  <g>
+    <rect x="90" y="132" width="180" height="46" rx="4" fill="#1E7F72"/>
+    <text x="180" y="160" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">COMERCIAL</text>
+  </g>
+  <g>
+    <rect x="270" y="132" width="180" height="46" rx="4" fill="#1E7F72"/>
+    <text x="360" y="160" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">IT / DESARROLLO</text>
+  </g>
+  <g>
+    <rect x="450" y="132" width="180" height="46" rx="4" fill="#1E7F72"/>
+    <text x="540" y="160" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">RRHH</text>
+  </g>
+  <g>
+    <rect x="630" y="132" width="180" height="46" rx="4" fill="#1E7F72"/>
+    <text x="720" y="160" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">ADMINISTRACIÓN</text>
+  </g>
+
+  <!-- employee dots representing public profiles -->
+  <text x="450" y="215" text-anchor="middle" fill="#5B6570" font-size="11">perfiles públicos identificados en redes profesionales</text>
+  <g id="dots"></g>
+  <script/>
+  <!-- static grid of circles -->
+  <g fill="#B9800E">
+    <circle cx="150" cy="240" r="8"/><circle cx="180" cy="240" r="8"/><circle cx="210" cy="240" r="8"/><circle cx="240" cy="240" r="8"/>
+    <circle cx="150" cy="265" r="8"/><circle cx="180" cy="265" r="8"/><circle cx="210" cy="265" r="8"/>
+    <circle cx="330" cy="240" r="8"/><circle cx="360" cy="240" r="8"/><circle cx="390" cy="240" r="8"/><circle cx="420" cy="240" r="8"/>
+    <circle cx="330" cy="265" r="8"/><circle cx="360" cy="265" r="8"/>
+    <circle cx="510" cy="240" r="8"/><circle cx="540" cy="240" r="8"/><circle cx="570" cy="240" r="8"/>
+    <circle cx="690" cy="240" r="8"/><circle cx="720" cy="240" r="8"/><circle cx="750" cy="240" r="8"/><circle cx="780" cy="240" r="8"/>
+  </g>
+  <g fill="#c7c9c0">
+    <circle cx="270" cy="240" r="8"/><circle cx="240" cy="265" r="8"/>
+    <circle cx="450" cy="240" r="8"/><circle cx="390" cy="265" r="8"/>
+    <circle cx="600" cy="240" r="8"/>
+    <circle cx="810" cy="240" r="8"/>
+  </g>
+  <text x="450" y="300" text-anchor="middle" fill="#B9800E" font-size="11" font-weight="700">ámbar = perfil con nombre, cargo y/o foto públicos</text>
+  <text x="450" y="316" text-anchor="middle" fill="#5B6570" font-size="10">gris = sin perfil público localizado</text>
+
+  <!-- pattern callout -->
+  <rect x="150" y="350" width="600" height="90" rx="6" fill="#12181D"/>
+  <text x="180" y="378" fill="#8FE3C7" font-size="11" font-weight="700">$ patrón inferido a partir de 2-3 correos confirmados</text>
+  <text x="180" y="400" fill="#EDEEEA" font-size="11">nombre@empresa.com</text>
+  <text x="180" y="418" fill="#EDEEEA" font-size="11">nombre.apellido@empresa.com</text>
+  <text x="500" y="409" fill="#9C3B2E" font-size="11" font-weight="700">→ directorio casi completo</text>
+
+  <text x="450" y="465" text-anchor="middle" fill="#5B6570" font-size="10.5">Diagrama ilustrativo — nombres, cargos y correos anonimizados.</text>
+</svg>

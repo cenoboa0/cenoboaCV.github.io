@@ -1,0 +1,62 @@
+<svg viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+  <rect width="900" height="460" fill="#F3F3EF"/>
+
+  <!-- visitor -->
+  <g>
+    <circle cx="90" cy="120" r="26" fill="#12181D"/>
+    <text x="90" y="126" text-anchor="middle" fill="#F3F3EF" font-size="11" font-weight="600">USUARIO</text>
+    <text x="90" y="162" text-anchor="middle" fill="#5B6570" font-size="11">visitante normal</text>
+  </g>
+
+  <!-- attacker -->
+  <g>
+    <circle cx="90" cy="330" r="26" fill="#9C3B2E"/>
+    <text x="90" y="336" text-anchor="middle" fill="#F3F3EF" font-size="11" font-weight="600">ATACANTE</text>
+    <text x="90" y="372" text-anchor="middle" fill="#5B6570" font-size="11">reconocimiento pasivo</text>
+  </g>
+
+  <!-- shield / WAF -->
+  <g>
+    <rect x="230" y="60" width="200" height="120" rx="6" fill="#1E7F72"/>
+    <text x="330" y="110" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">ESCUDO PERIMETRAL</text>
+    <text x="330" y="130" text-anchor="middle" fill="#DDEDE9" font-size="11">(WAF / CDN)</text>
+    <text x="330" y="152" text-anchor="middle" fill="#DDEDE9" font-size="10">dominio principal.com</text>
+  </g>
+
+  <!-- direct subdomain (unshielded) -->
+  <g>
+    <rect x="230" y="270" width="200" height="120" rx="6" fill="#F3F3EF" stroke="#9C3B2E" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="330" y="315" text-anchor="middle" fill="#9C3B2E" font-size="12" font-weight="700">SUBDOMINIO SIN</text>
+    <text x="330" y="332" text-anchor="middle" fill="#9C3B2E" font-size="12" font-weight="700">ESCUDO</text>
+    <text x="330" y="354" text-anchor="middle" fill="#5B6570" font-size="10">ej. entorno de pruebas /</text>
+    <text x="330" y="368" text-anchor="middle" fill="#5B6570" font-size="10">pasarela de pagos</text>
+  </g>
+
+  <!-- real server -->
+  <g>
+    <rect x="620" y="165" width="220" height="130" rx="6" fill="#12181D"/>
+    <text x="730" y="205" text-anchor="middle" fill="#B9800E" font-size="12" font-weight="700" letter-spacing="1">SERVIDOR REAL</text>
+    <text x="730" y="228" text-anchor="middle" fill="#C9CDC7" font-size="10">base de datos, pagos,</text>
+    <text x="730" y="244" text-anchor="middle" fill="#C9CDC7" font-size="10">paneles internos</text>
+    <rect x="655" y="260" width="150" height="18" rx="3" fill="#1B232B"/>
+    <text x="730" y="273" text-anchor="middle" fill="#8FE3C7" font-size="9">IP de origen oculta</text>
+  </g>
+
+  <!-- arrows -->
+  <path d="M120,120 L225,120" stroke="#12181D" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M430,120 C 520,120 560,180 618,215" stroke="#1E7F72" stroke-width="2.5" fill="none" marker-end="url(#arrowTeal)"/>
+
+  <path d="M120,330 L225,330" stroke="#9C3B2E" stroke-width="2" fill="none" marker-end="url(#arrowRed)"/>
+  <path d="M430,330 C 520,330 560,270 618,245" stroke="#9C3B2E" stroke-width="3" fill="none" marker-end="url(#arrowRed)"/>
+
+  <text x="480" y="245" text-anchor="middle" fill="#9C3B2E" font-size="11" font-weight="700">acceso directo</text>
+  <text x="480" y="260" text-anchor="middle" fill="#9C3B2E" font-size="11" font-weight="700">sin filtrar</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#12181D"/></marker>
+    <marker id="arrowTeal" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#1E7F72"/></marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9C3B2E"/></marker>
+  </defs>
+
+  <text x="450" y="430" text-anchor="middle" fill="#5B6570" font-size="10.5">Diagrama ilustrativo — nombres de dominio y direcciones IP anonimizados.</text>
+</svg>
