@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escalada de Privilegios en Linux, explicada sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa la cadena de escalada de privilegios del Caso 05, explicada en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* finding blocks */
+  .finding{border-left:4px solid var(--rule);padding-left:26px;}
+  .finding.c-red{border-left-color:var(--accent-red);}
+  .finding.c-amber{border-left-color:var(--accent-amber);}
+  .finding .eyebrow.c-red{color:var(--accent-red);}
+  .finding .eyebrow.c-amber{color:var(--accent-amber);}
+  .finding .risk-tag{
+    display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;
+    border:1.5px solid currentColor;border-radius:999px;padding:3px 10px;margin-left:10px;vertical-align:middle;
+  }
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.risk{border-left:3px solid var(--accent-red);}
+  .callout.fix{border-left:3px solid var(--accent-teal);}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+  .platform-panel figcaption{color:#8A9299;}
+
+  /* chain visual */
+  .chain-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
+  .chain-step{
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.02em;
+    border:1px solid var(--ink);border-radius:3px;padding:6px 11px;background:var(--paper);
+  }
+  .chain-arrow{color:var(--muted);align-self:center;font-family:var(--mono);}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+  .cta-secondary{
+    font-family:var(--mono);font-size:.82rem;color:var(--accent-red);text-decoration:none;
+    border-bottom:1px solid var(--accent-red);
+  }
+  .cta-secondary:hover{color:var(--ink);border-color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .finding{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 05</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Escalada de privilegios en Linux, explicada sin tecnicismos</h1>
+    <p class="lede">En un ejercicio práctico del Máster en Ciberseguridad de la VIU, se auditó una máquina de entrenamiento diseñada a propósito con fallos de seguridad. Ninguno de esos fallos era, por sí solo, especialmente sofisticado. El problema es que ninguno hacía falta que lo fuera: bastó con encontrarlos y encadenarlos, uno detrás de otro, para pasar de no tener ningún acceso a controlar la máquina por completo.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">6</span><span class="l">Fallos encadenados</span></div>
+      <div class="stat"><span class="n">1</span><span class="l">Sistema totalmente comprometido</span></div>
+      <div class="stat"><span class="n">CRÍTICO</span><span class="l">Nivel de riesgo global</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-teal);">El punto de partida</p>
+      <h2 class="section-title">Una máquina con tres puertas visibles desde fuera</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Antes de tocar nada por dentro, un primer vistazo desde fuera ya mostraba tres servicios activos en la máquina: un servidor de transferencia de archivos, un acceso remoto seguro y una página web. Ninguno de los tres, por separado, es motivo de alarma &mdash;son servicios normales en casi cualquier servidor. El problema apareció en cómo estaba configurado cada uno de ellos.</p>
+        <p style="margin:0;">Es el equivalente a inspeccionar un edificio desde la acera: se ven tres entradas, todas con aspecto normal. La auditoría consistió en probar, una por una, si de verdad estaban tan bien cerradas como parecía.</p>
+        <figure>
+          <img src="lab4-assets/recon-nmap.jpg" alt="Resultado de un escaneo de puertos mostrando tres servicios abiertos: FTP, SSH y HTTP">
+          <figcaption>El escaneo inicial ya revela más de lo que debería: el servicio de archivos (FTP) permite entrar como invitado anónimo, y muestra dos archivos sensibles sentados ahí mismo.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="v1">
+    <div class="wrap">
+      <div class="finding c-amber">
+        <p class="eyebrow c-amber">Vector 1<span class="risk-tag">Riesgo alto</span></p>
+        <h2 class="section-title">La puerta de servicio, abierta y con la llave puesta</h2>
+        <div class="prose">
+          <p>El servicio de transferencia de archivos permitía entrar como invitado, sin usuario ni contraseña &mdash;una opción llamada "acceso anónimo" que muchos sistemas traen activada por error. Dentro de esa carpeta pública había dos archivos que nunca debieron estar ahí: una llave de acceso remoto (una credencial digital que sustituye a la contraseña) y una nota de texto con el nombre del usuario del sistema.</p>
+          <p>Es como si una empresa dejara la puerta de servicio sin llave, y además colgara junto a ella una copia de la llave maestra con una nota pegada: "para el guardia nocturno, por si se le olvida la suya". El equipo simplemente entró, tomó ambas cosas, y las usó para acceder directamente como ese usuario.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v1-ssh-shell.jpg" alt="Terminal mostrando una conexión SSH exitosa usando la llave privada descargada, confirmando acceso como el usuario del sistema">
+          <figcaption>Con la llave descargada del servicio de archivos, el acceso remoto se concede sin pedir ninguna contraseña. El comando final confirma la identidad obtenida: el usuario legítimo del sistema.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Cualquier credencial de acceso &mdash;una llave, un token, una contraseña&mdash; guardada en un lugar de acceso público equivale a dejarla tirada en la calle. Un atacante no necesita adivinar nada: solo necesita mirar donde nadie debería haber dejado nada.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Desactivar el acceso anónimo en los servicios de archivos que no lo necesiten, y no guardar nunca credenciales de acceso en carpetas compartidas o de acceso público.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v2">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Vector 2<span class="risk-tag">Riesgo crítico</span></p>
+        <h2 class="section-title">Un permiso "inofensivo" que resultó ser la llave maestra</h2>
+        <div class="prose">
+          <p>Ya dentro del sistema como usuario normal, se descubrió que ese usuario tenía permiso para abrir un editor de texto básico "como si fuera el administrador", sin que el sistema pidiera ninguna contraseña para ello. El detalle importante es que ese editor de texto, como muchos programas similares, tiene un atajo interno para abrir una línea de comandos completa desde dentro. Al abrir el editor como administrador, ese atajo también se abre con privilegios de administrador.</p>
+          <p>Es como si a un empleado se le diera la llave de un archivador concreto, sin saber que esa misma llave, por un descuido del fabricante, también abre la puerta principal del edificio.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v2-sudo-vim.jpg" alt="Terminal mostrando que el usuario puede ejecutar el editor Vim como administrador sin contraseña">
+          <figcaption>El sistema confirma, en su propia respuesta, que este usuario puede abrir el editor Vim con privilegios de administrador sin que se le pida ninguna contraseña.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Un solo permiso otorgado de más &mdash;incluso sobre un programa que parece completamente inofensivo, como un editor de texto&mdash; puede convertirse en el camino directo hacia el control total del sistema.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Revisar qué programas tienen permiso para ejecutarse "como administrador sin contraseña", y no concederlo nunca a ninguno capaz de abrir una línea de comandos o ejecutar órdenes del sistema.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v3">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Vector 3<span class="risk-tag">Riesgo crítico</span></p>
+        <h2 class="section-title">Una tarea automática que ejecuta, sin revisar, lo que cualquiera le deje escrito</h2>
+        <div class="prose">
+          <p>El servidor ejecutaba automáticamente, cada cierto tiempo, una pequeña tarea de mantenimiento con permisos de administrador. El archivo que contenía esa tarea estaba configurado para que cualquier persona pudiera modificarlo libremente. El equipo simplemente reescribió su contenido, añadiendo una instrucción que abriría un canal de conexión hacia su propio equipo, y esperó a que el sistema ejecutara la tarea por su cuenta &mdash;como siempre hace, con permisos de administrador, sin preguntar nada.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v3-script-permisos.jpg" alt="Página web con un cuadro de comandos y el listado de archivos mostrando que el script de la tarea automática tiene permisos abiertos a cualquier usuario">
+          <figcaption>Una página del propio sitio web escondía un cuadro para ejecutar comandos directamente en el servidor. A través de él se confirma que el archivo de la tarea automática puede ser leído, modificado y ejecutado por cualquiera.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Cualquier tarea automática que corra con permisos elevados es tan segura como el archivo del que lee sus instrucciones. Si cualquier empleado puede editar ese archivo, en la práctica cualquier empleado puede darse a sí mismo esos mismos permisos.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Restringir los permisos de escritura sobre los archivos que ejecutan tareas automáticas con privilegios elevados, de forma que solo la propia cuenta de administrador pueda modificarlos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v4">
+    <div class="wrap">
+      <div class="finding c-amber">
+        <p class="eyebrow c-amber">Vector 4<span class="risk-tag">Riesgo alto</span></p>
+        <h2 class="section-title">Una lista de contraseñas, publicada sin darse cuenta</h2>
+        <div class="prose">
+          <p>En el propio sitio web de la empresa, dentro de una carpeta que cualquiera podía abrir con el navegador, apareció un archivo con una lista de posibles contraseñas. El equipo lo descargó y simplemente probó cada una contra el nombre de usuario descubierto en el vector anterior, hasta que una de ellas funcionó y permitió iniciar sesión como ese empleado.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v4-passwords-index.jpg" alt="Navegador mostrando el listado de una carpeta pública del servidor web con un archivo llamado passwords.txt visible">
+          <figcaption>Basta con escribir la dirección de la carpeta en el navegador: ahí está, a la vista de cualquiera, un archivo llamado literalmente "passwords.txt".</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Publicar cualquier cosa relacionada con contraseñas en un servidor web accesible al público &mdash;incluso por accidente, incluso "solo para pruebas"&mdash; equivale a entregarle a un atacante un manojo de llaves ya hecho.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>No almacenar nunca listas de contraseñas o archivos de credenciales en carpetas accesibles desde el sitio web; las credenciales deben vivir únicamente en sistemas dedicados y con control de acceso.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v5">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Vector 5<span class="risk-tag">Riesgo crítico</span></p>
+        <h2 class="section-title">Un permiso demasiado generoso, más un parche que nunca se instaló</h2>
+        <div class="prose">
+          <p>Aquí se juntaron dos problemas independientes que, cada uno por su lado, ya eran suficientes. Primero, la política de permisos del sistema decía "cualquiera del grupo general de administración puede aprobar acciones con privilegios", y el usuario ya comprometido resultó pertenecer justo a ese grupo. Segundo, incluso sin eso, una herramienta del sistema tenía un fallo conocido públicamente &mdash;con nombre propio, "PwnKit"&mdash; que permitía a cualquier usuario convertirse en administrador con una sola orden. El arreglo para ese fallo llevaba tiempo disponible; simplemente nunca se había instalado.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v5-pwnkit-root.jpg" alt="Terminal ejecutando la herramienta de explotación PwnKit y obteniendo una sesión con privilegios de administrador de forma instantánea">
+          <figcaption>Una sola orden, dirigida a una herramienta que llevaba tiempo sin actualizarse, y la respuesta del sistema confirma privilegios de administrador al instante.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Dos señales distintas apuntan a la misma conclusión: los grupos de permisos demasiado amplios y las actualizaciones de seguridad pendientes de instalar son, cada uno por separado, suficientes para entregar el control total del sistema.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Revisar quién pertenece a qué grupo de permisos y reducirlo a lo estrictamente necesario, y mantener los sistemas actualizados instalando los parches de seguridad tan pronto como se publican.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="v6">
+    <div class="wrap">
+      <div class="finding c-red">
+        <p class="eyebrow c-red">Vector 6<span class="risk-tag">Riesgo crítico</span></p>
+        <h2 class="section-title">Una terminal olvidada en la web, y una caja fuerte con la combinación fácil de adivinar</h2>
+        <div class="prose">
+          <p>Una página oculta del sitio web &mdash;encontrada simplemente probando nombres de carpeta habituales&mdash; resultó tener un cuadro que ejecutaba órdenes directamente en el servidor, sin pedir ningún inicio de sesión. A través de esa puerta, el equipo exploró los archivos del servidor, encontró una carpeta con datos de usuarios protegidos con un método de cifrado antiguo y débil, y dejó que un programa probara automáticamente combinaciones hasta dar con la contraseña original. Esa contraseña abría el panel completo de administración del sistema de noticias de la web.</p>
+        </div>
+        <figure>
+          <img src="lab4-assets/v6-cutenews-login.jpg" alt="Formulario de inicio de sesión del sistema de gestión de noticias CuteNews con las credenciales de administrador ya escritas">
+          <figcaption>Con la contraseña ya descifrada, el formulario de acceso del sistema de noticias del sitio queda listo para iniciar sesión como administrador.</figcaption>
+        </figure>
+        <figure>
+          <img src="lab4-assets/v6-cutenews-panel.jpg" alt="Panel de administración de CuteNews mostrando acceso completo con el mensaje de bienvenida al administrador">
+          <figcaption>Acceso total concedido: el panel saluda directamente como administrador, con control completo sobre el contenido, los usuarios y la configuración del sitio.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Una sola herramienta de diagnóstico olvidada en el servidor, sumada a una forma anticuada de proteger las contraseñas guardadas, se traducen juntas en el control total del contenido y los datos de usuario de la empresa.</p>
+        </div>
+        <div class="callout fix">
+          <p class="ctitle">Cómo se corrige</p>
+          <p>Eliminar cualquier herramienta de ejecución de comandos que quede olvidada en los servidores en producción, y sustituir los métodos anticuados de proteger contraseñas por otros modernos, resistentes a la prueba automática de combinaciones.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Por qué importa la cadena completa, no cada fallo por separado</h2>
+      <div class="prose">
+        <p>Ninguno de estos seis fallos ocurrió en un sistema real ni afectó a una empresa de verdad &mdash;todo sucedió dentro de una máquina de entrenamiento, con autorización y con fines exclusivamente educativos. Pero cada uno de ellos, por separado, es un error que aparece con frecuencia en sistemas reales: una credencial mal guardada, un permiso demasiado generoso, un parche pendiente, una página olvidada. Ninguno exigió herramientas sofisticadas ni conocimientos avanzados. Lo que los vuelve críticos es que, encadenados, se refuerzan entre sí: cada fallo pequeño abrió la puerta al siguiente, hasta llegar al control total del sistema.</p>
+      </div>
+      <div class="chain-row">
+        <span class="chain-step">Llave SSH expuesta (FTP)</span>
+        <span class="chain-arrow">&rarr;</span>
+        <span class="chain-step">Acceso inicial</span>
+        <span class="chain-arrow">&rarr;</span>
+        <span class="chain-step">Vim como admin</span>
+        <span class="chain-arrow">&rarr;</span>
+        <span class="chain-step">Control total</span>
+      </div>
+      <p class="score-line">6 vectores encadenados &middot; nivel de riesgo global CRÍTICO &middot; recomendaciones de mitigación entregadas para cada vector</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
