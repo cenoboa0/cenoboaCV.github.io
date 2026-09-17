@@ -523,8 +523,22 @@
     </div>
   </article>
 </a>
-
     <!-- Case 04 -->
+    <a href="https://cenoboa0.github.io/cenoboaCV.github.io/lab4-root/index_lab_4.html" target="_blank" rel="noopener" style="text-decoration: none; color: inherit; display: block;">
+    <article class="case" data-open="false">
+      <div class="seal">ROOT<br>CHAIN</div>
+      <div class="case-head" role="button" tabindex="0" aria-expanded="false">
+        <div class="htext">
+          <div class="no">CASO 05 — PRIVESC / LINUX</div>
+          <h3>Cadena de Escalada de Privilegios en Máquina Linux Multivulnerable</h3>
+          <div class="role">Investigador de Seguridad / Pentester — Máster en Ciberseguridad, VIU</div>
+        </div>
+        <div class="chev">+</div>
+      </div>
+    </article>
+    </a>  
+    
+    <!-- Case 05 -->
     <article class="case" data-open="false">
       <div class="seal">INFO<br>DISCLOSURE</div>
       <div class="case-head" role="button" tabindex="0" aria-expanded="false">
@@ -554,39 +568,7 @@
       </div>
     </article>
 
-    <!-- Case 05 -->
-    <article class="case" data-open="false">
-      <div class="seal">ROOT<br>CHAIN</div>
-      <div class="case-head" role="button" tabindex="0" aria-expanded="false">
-        <div class="htext">
-          <div class="no">CASO 05 — PRIVESC / LINUX</div>
-          <h3>Cadena de Escalada de Privilegios en Máquina Linux Multivulnerable</h3>
-          <div class="role">Investigador de Seguridad / Pentester — Máster en Ciberseguridad, VIU</div>
-        </div>
-        <div class="chev">+</div>
-      </div>
-      <div class="case-body">
-        <div class="case-body-inner">
-          <h4>Escenario</h4>
-          <p>Prueba de penetración completa sobre una máquina virtual Linux diseñada con múltiples vulnerabilidades independientes, con el objetivo de identificar vectores de acceso inicial y de escalada de privilegios que permitieran el compromiso total del sistema hasta obtener acceso root.</p>
-          <h4>Logros</h4>
-          <p>Compromiso total del sistema mediante el encadenamiento de seis vectores: acceso FTP anónimo con exfiltración de una clave privada SSH; abuso de una regla NOPASSWD en <code>sudoers</code> sobre el binario Vim para obtener una shell de root; inyección de código en un script ejecutado periódicamente por cron con privilegios de root; obtención de credenciales SSH válidas a partir de un archivo de contraseñas expuesto en el servidor web; escalada de privilegios mediante políticas mal configuradas de Polkit y explotación de la vulnerabilidad PwnKit (CVE-2021-4034); y ejecución remota de código sobre el servicio HTTP con post-explotación sobre el CMS CuteNews, incluyendo descifrado de un hash de contraseña y acceso al panel de administración.</p>
-          <h4>Metodología</h4>
-          <p>Reconocimiento de red y enumeración de servicios (arp-scan, Nmap, Gobuster) → explotación de vectores de acceso inicial sin privilegios → escalada de privilegios mediante abuso de configuraciones erróneas y vulnerabilidades conocidas → post-explotación y establecimiento de persistencia, con documentación de recomendaciones de mitigación específicas para cada vector.</p>
-          <div class="tool-row">
-            <span class="tool recon"><span class="dot"></span>arp-scan</span>
-            <span class="tool recon"><span class="dot"></span>Nmap</span>
-            <span class="tool recon"><span class="dot"></span>Gobuster</span>
-            <span class="tool exploit"><span class="dot"></span>THC Hydra</span>
-            <span class="tool exploit"><span class="dot"></span>Burp Suite</span>
-            <span class="tool exploit"><span class="dot"></span>Netcat</span>
-            <span class="tool exploit"><span class="dot"></span>GTFOBins (Vim)</span>
-            <span class="tool exploit"><span class="dot"></span>PwnKit (CVE-2021-4034)</span>
-          </div>
-          <a class="case-link" href="https://github.com/cenoboa0/Hacking-e-tico-/blob/main/Proyectos/Escalada_Privilegios.pdf" target="_blank" rel="noopener">Ver informe completo ↗</a>
-        </div>
-      </div>
-    </article>
+
 
     <!-- Case 06 -->
     <article class="case" data-open="false">
