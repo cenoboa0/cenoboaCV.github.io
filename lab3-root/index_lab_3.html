@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poner en orden un archivo de accesos SSH, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa analizar automáticamente un registro de accesos SSH con R, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+  .platform-panel figcaption{color:#8A9299;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+  .note-box{
+    max-width:680px;margin-top:22px;padding:16px 20px;
+    background:var(--panel);border:1px dashed var(--rule);border-radius:3px;
+    font-size:.94rem;color:var(--muted);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 03</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Poner en orden un archivo de accesos SSH, explicado sin tecnicismos</h1>
+    <p class="lede">En un ejercicio del Máster en Ciberseguridad de la VIU, se construyó un script en R que toma un archivo con más de 87.000 intentos de acceso remoto a un servidor y lo convierte, de forma automática, en un conteo claro: cuántos atacantes distintos hay y cuáles de ellos insistieron más.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">87.622</span><span class="l">Intentos de acceso registrados</span></div>
+      <div class="stat"><span class="n">50</span><span class="l">Direcciones de origen distintas</span></div>
+      <div class="stat"><span class="n">453</span><span class="l">Nombres de usuario distintos probados</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Un script que se prepara solo antes de analizar nada</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Antes de examinar un solo dato, el script hace algo que parece menor pero no lo es: comprueba si existe, en el computador, la carpeta de trabajo que necesita, y la crea automáticamente si no está. Ese detalle es lo que permite que el mismo script se pueda ejecutar de nuevo, en otro momento o en otro equipo, sin que nadie tenga que preparar nada a mano de antemano.</p>
+        <p style="margin:0;">Con esa base lista, el script carga el archivo completo de registros de acceso &mdash;87.622 líneas&mdash; en cuestión de segundos.</p>
+        <figure>
+          <img src="lab3-assets/entorno-carga.jpg" alt="Código en RStudio creando la carpeta de trabajo y cargando el archivo de registros SSH, con las primeras filas mostradas en consola">
+          <figcaption>El script revisa y prepara su propio espacio de trabajo, y a continuación carga el archivo completo de accesos: 87.622 líneas, con usuario, dirección de origen y fecha de cada intento.</figcaption>
+        </figure>
+        <div class="callout biz" style="background:transparent;border-color:#3A444C;">
+          <p class="ctitle" style="color:#9BA3AB;">Para qué sirve esto en una empresa</p>
+          <p style="color:#EDEEEA;">Un análisis que solo funciona porque alguien preparó una carpeta a mano de antemano no está realmente automatizado, solo lo parece la primera vez. Que el propio script se encargue de esa preparación es lo que permite que un compañero lo retome y lo vuelva a ejecutar sin tener que preguntar nada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso1">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 1</p>
+        <h2 class="section-title">Contar cuántos atacantes distintos hay, antes de mirar nada más</h2>
+        <div class="prose">
+          <p>Con el archivo ya cargado, la primera pregunta que se le hizo a los datos fue la más básica: de las 87.622 líneas registradas, ¿cuántas direcciones de origen distintas aparecen, y cuántos nombres de usuario distintos se intentaron? Ese conteo inicial ya dice algo importante sobre la naturaleza del problema: no es lo mismo un puñado de orígenes insistiendo mucho que centenares de nombres de usuario distintos siendo probados al azar.</p>
+        </div>
+        <figure>
+          <img src="lab3-assets/conteo-ranking-ips.jpg" alt="Consola de R mostrando 50 direcciones IP únicas, 453 nombres de usuario únicos, y una tabla ordenada con el número de intentos por dirección">
+          <figcaption>El resultado: 50 direcciones de origen distintas y 453 nombres de usuario distintos probados sobre el mismo servidor.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Ese primer conteo, por sí solo, ya sirve para dimensionar el tamaño de un posible incidente: cuántos orígenes distintos hay que investigar y cuántas cuentas pudieron verse expuestas, antes de invertir tiempo en analizar cada intento uno por uno.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso2">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Paso 2</p>
+        <h2 class="section-title">Convertir un conteo desordenado en una lista de prioridades</h2>
+        <div class="prose">
+          <p>Un conteo en el orden en que sale del programa no sirve para decidir nada. El script reorganizó esas 50 direcciones en una tabla ordenada de mayor a menor número de intentos, con una columna de identificación limpia, lista para leerse como un informe y no como una salida de programación en bruto. En esa tabla ya ordenada aparece un dato que llama la atención de inmediato: el primer resultado concentra 86.623 de los 87.622 intentos totales del archivo &mdash;prácticamente la totalidad del registro&mdash;, mientras que el resto de direcciones se reparte entre 20 y 42 intentos cada una.</p>
+        </div>
+        <div class="note-box">
+          Ese primer resultado, tan alejado del resto, es exactamente el tipo de valor que un analista marcaría para revisar primero: o hay un origen que domina por completo el tráfico de intentos, o ese renglón agrupa registros que quedaron sin una dirección válida asociada. En cualquiera de los dos casos, es el primer punto que merece una segunda mirada antes de dar el análisis por cerrado.
+        </div>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Esta es, en esencia, la lista de prioridades que usaría cualquier equipo de seguridad para decidir qué dirección bloquear o investigar primero, generada automáticamente en lugar de construida a mano revisando miles de líneas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Qué más incluye el ejercicio</h2>
+      <div class="prose">
+        <p>El resto del script son ejercicios de práctica sobre las mismas herramientas de R &mdash;filtrar tablas por condiciones, trabajar con listas de datos mixtos, construir funciones propias reutilizables&mdash; resueltos sobre datos de ejemplo sin relación con el archivo de accesos SSH, pensados para dominar las piezas básicas del lenguaje antes de aplicarlas a un caso real como el de este análisis.</p>
+      </div>
+      <p class="score-line">87.622 intentos analizados &middot; 50 direcciones de origen distintas &middot; 453 nombres de usuario distintos</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
