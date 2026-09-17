@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web scraping y visualización de datos, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa un ejercicio de extracción y visualización automática de datos web, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+  .platform-panel figcaption{color:#8A9299;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 06</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Radiografiar una página web con un programa, explicado sin tecnicismos</h1>
+    <p class="lede">En un ejercicio del Máster en Ciberseguridad de la VIU, el equipo construyó un pequeño programa que visita una página web por su cuenta, revisa cada enlace que contiene, comprueba si todavía funciona, y convierte todo eso en gráficos claros &mdash;sin que nadie tuviera que hacer clic en la página ni una sola vez.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">169</span><span class="l">Enlaces catalogados</span></div>
+      <div class="stat"><span class="n">96,9%</span><span class="l">Respondiendo con normalidad</span></div>
+      <div class="stat"><span class="n">3</span><span class="l">Gráficos generados solos</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Por qué hacer esto con un programa y no a mano</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Imaginemos revisar, en una página con casi 170 enlaces, si cada uno de ellos todavía lleva a algún sitio o si ya está roto &mdash;uno por uno, a mano. Es tedioso, lento y propenso a errores. Este ejercicio construyó un pequeño programa que hace exactamente eso de forma automática, en minutos, usando como ejemplo la página de documentación pública de MediaWiki (el software detrás de Wikipedia) &mdash;elegida simplemente por ser un caso manejable y realista, no por tratarse de un sitio propio.</p>
+        <p style="margin:0;">La misma técnica, aplicada al sitio web de una empresa, es la base de las herramientas que avisan automáticamente cuando algo se rompe en la propia página, sin depender de que un cliente lo reporte primero.</p>
+        <figure>
+          <img src="lab5-assets/descarga-parseo.jpg" alt="Código en RStudio descargando una página web y convirtiéndola en un documento que el programa puede recorrer">
+          <figcaption>El primer paso del programa: pedirle la página a internet, exactamente como lo haría un navegador, y guardar su contenido en un formato que se pueda recorrer y consultar automáticamente.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso1">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 1</p>
+        <h2 class="section-title">Catalogar cada enlace de la página, uno por uno</h2>
+        <div class="prose">
+          <p>Una vez que el programa podía "leer" la estructura de la página, recorrió cada enlace que encontró y anotó dos cosas de cada uno: el texto visible para quien visita la página (por ejemplo, "Ayuda") y la dirección real a la que apunta. Repetido en toda la página, esto produjo un catálogo de 169 enlaces, junto con cuántas veces se repite cada uno &mdash;útil para detectar, por ejemplo, que un enlace del menú aparece tanto al principio como al final de cada página.</p>
+        </div>
+        <figure>
+          <img src="lab5-assets/catalogo-enlaces.jpg" alt="Tabla con el texto y la dirección de cada enlace extraído de la página, y el total de 169 enlaces encontrados">
+          <figcaption>El resultado es una tabla ordenada: qué dice cada enlace y a dónde lleva realmente, con el conteo total al final &mdash;169 enlaces, catalogados sin que nadie los contara a mano.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Con esta misma técnica, una empresa puede mantener un inventario siempre actualizado de todos los enlaces internos y externos de su propio sitio web, en lugar de depender de que alguien lo revise a mano cada vez que se publica un cambio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso2">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Paso 2</p>
+        <h2 class="section-title">Comprobar, uno por uno, si cada enlace todavía funciona</h2>
+        <div class="prose">
+          <p>Tener la dirección de un enlace no es lo mismo que saber si todavía lleva a algún sitio. El programa visitó, uno por uno, los 139 enlaces únicos encontrados y preguntó a cada uno, en la práctica, "¿sigues ahí?" &mdash;anotando la respuesta. De los enlaces consultados, el 96,9% respondió con normalidad; el resto no respondió a tiempo.</p>
+        </div>
+        <figure>
+          <img src="lab5-assets/verificacion-http.jpg" alt="Tabla final mostrando cada enlace junto a su código de respuesta HTTP, la mayoría con el código 200 que indica que funciona correctamente">
+          <figcaption>La tabla final añade una columna más: el código de respuesta de cada enlace. El 200 significa "todo en orden"; ausencia de respuesta significa un enlace que dejó de funcionar.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Esto es, en esencia, un "verificador de enlaces rotos" &mdash;el tipo de herramienta que evita que el sitio web de una empresa se vaya llenando de enlaces muertos sin que nadie se dé cuenta, algo que perjudica tanto la experiencia del visitante como la posición del sitio en los buscadores.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso3">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 3</p>
+        <h2 class="section-title">Convertir cientos de filas de datos en tres gráficos que se entienden de un vistazo</h2>
+        <div class="prose">
+          <p>Toda esa información en bruto &mdash;cientos de filas de texto, direcciones y códigos de respuesta&mdash; es difícil de leer como tabla. El último paso la convirtió en tres imágenes sencillas, una junto a otra: cuántos enlaces estaban escritos como dirección completa frente a los que usaban un atajo, cuántos se quedaban dentro del propio sitio frente a los que apuntaban hacia fuera, y qué proporción de todos ellos realmente funcionaba.</p>
+        </div>
+        <figure>
+          <img src="lab5-assets/infografia-final.jpg" alt="Tres gráficos generados automáticamente: barras de URLs absolutas vs relativas, barras de enlaces internos vs externos, y un gráfico circular de códigos de estado HTTP">
+          <figcaption>El resultado final: tres gráficos generados automáticamente por el programa, sin retocar nada a mano, listos para incluir en un informe o un panel de control.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Convertir datos en bruto en un puñado de gráficos claros es lo que separa "tenemos una hoja de cálculo que nadie lee" de "tenemos un panel que alguien revisa cada semana".</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Por qué importa esto más allá del ejercicio académico</h2>
+      <div class="prose">
+        <p>La página analizada aquí es pública y se usó únicamente como ejemplo manejable y realista &mdash;el ejercicio no tenía relación con ninguna empresa real. Pero la técnica escala directamente al sitio web de cualquier organización: revisar automáticamente, de forma periódica y sin intervención manual, cientos o miles de enlaces propios, y generar de paso los gráficos que resumen ese estado. Es el mismo principio detrás de las herramientas de monitorización que avisan a una empresa en el momento en que algo se rompe en su propio sitio, en lugar de enterarse por un cliente frustrado.</p>
+      </div>
+      <p class="score-line">169 enlaces catalogados &middot; 96,9% respondiendo correctamente &middot; 3 gráficos generados automáticamente</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Camilo Arias Martínez, Maider Ibarra Ariño y Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
