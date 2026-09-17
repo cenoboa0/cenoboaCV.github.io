@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un panel que vigila una tienda web sola, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa montar un panel de monitorización tipo SIEM con Splunk, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+  .platform-panel figcaption{color:#8A9299;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 07</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Un panel que vigila una tienda web, sin que nadie tenga que mirar los registros a mano</h1>
+    <p class="lede">En un ejercicio del Máster en Ciberseguridad de la VIU, se montó desde cero una herramienta de monitorización (un SIEM, el tipo de sistema que usan los equipos de seguridad para vigilar una red) sobre los datos de una tienda de videojuegos ficticia, y se convirtió más de 439.000 registros sueltos en un panel de tres indicadores que se lee de un vistazo.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">439.456</span><span class="l">Eventos indexados</span></div>
+      <div class="stat"><span class="n">21.000</span><span class="l">Errores de acceso detectados</span></div>
+      <div class="stat"><span class="n">1</span><span class="l">Panel con la fotografía completa</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Por qué una empresa necesita algo más que un archivo de registros</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Cualquier sitio web o sistema informático va dejando un rastro constante de lo que ocurre: quién entró, qué páginas visitó, qué falló. Ese rastro se acumula en archivos de texto conocidos como "logs" &mdash;y en un negocio real, esos archivos crecen a un ritmo de miles de líneas por minuto. Leerlos uno por uno, a mano, es sencillamente inviable.</p>
+        <p style="margin:0;">Este ejercicio instaló Splunk, una herramienta que hace justamente eso a escala: recoge todo ese rastro, permite hacerle preguntas en un lenguaje parecido al humano, y convierte la respuesta en un panel visual que un supervisor puede revisar en segundos, no en horas.</p>
+        <figure>
+          <img src="lab6-assets/splunk-home.jpg" alt="Pantalla de bienvenida de Splunk Enterprise tras el primer inicio de sesión, saludando al usuario Carlos Noboa">
+          <figcaption>La herramienta ya instalada y funcionando, lista para empezar a hacerle preguntas a los datos.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso1">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 1</p>
+        <h2 class="section-title">Cargar el rastro completo de la tienda</h2>
+        <div class="prose">
+          <p>Se cargaron los registros de una tienda de videojuegos ficticia usada como ejemplo de práctica &mdash;accesos web, intentos de conexión y un listado de precios&mdash; para que la herramienta los indexara y quedaran listos para consultarse. En total, entraron 172.412 líneas de rastro solo en la primera carga, entre ellas una tanda de intentos de acceso fallidos por SSH que la propia herramienta capturó igual que cualquier otro evento.</p>
+        </div>
+        <figure>
+          <img src="lab6-assets/ingesta-datos.jpg" alt="Pantalla de Splunk mostrando 172,412 eventos cargados, incluyendo registros de intentos de acceso SSH fallidos">
+          <figcaption>172.412 líneas de rastro, cargadas e indexadas de una sola vez &mdash;listas para consultarse sin tener que abrir un solo archivo de texto a mano.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Centralizar el rastro de todos los sistemas en un solo lugar es el primer paso de cualquier estrategia de monitorización seria: sin eso, cada incidente obliga a revisar servidor por servidor, archivo por archivo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso2">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Paso 2</p>
+        <h2 class="section-title">Hacerle preguntas directas a más de 400.000 registros</h2>
+        <div class="prose">
+          <p>Con los datos ya cargados, se le hicieron a la herramienta cuatro preguntas concretas: ¿cuántas peticiones fallaron?, ¿qué direcciones de origen generan más tráfico?, ¿qué productos se compran más?, ¿qué productos se miran más? Cada pregunta se escribe en una sola línea de texto y la respuesta llega en segundos, ya ordenada y contada, sobre un total de 439.456 registros.</p>
+        </div>
+        <figure>
+          <img src="lab6-assets/busqueda-ips.jpg" alt="Consulta escrita en Splunk que agrupa y ordena las diez direcciones IP con más peticiones, con sus conteos">
+          <figcaption>Una sola pregunta escrita en la barra de búsqueda &mdash;"agrupa por origen y ordena de mayor a menor"&mdash; devuelve al instante qué diez direcciones concentran más tráfico.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Esa misma pregunta, hecha sobre el tráfico real de una empresa, es exactamente cómo se detecta un origen sospechoso de tráfico automatizado, un intento de fuerza bruta o un posible abuso, sin tener que revisar el tráfico línea por línea.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso3">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 3</p>
+        <h2 class="section-title">Convertir cuatro respuestas sueltas en un solo panel</h2>
+        <div class="prose">
+          <p>Las preguntas y sus respuestas, por separado, siguen siendo información dispersa. El último paso combinó tres de ellas &mdash;el total de errores de acceso, el ranking de direcciones más activas y las vistas por producto&mdash; en un único panel visual, pensado para leerse en el primer vistazo de un turno de vigilancia, sin ejecutar ninguna consulta nueva.</p>
+        </div>
+        <figure>
+          <img src="lab6-assets/dashboard-final.jpg" alt="Panel final de Splunk con tres indicadores: gráfico de vistas por producto, tabla de IPs con más actividad y un indicador grande con el total de 21,000 errores HTTP">
+          <figcaption>El panel final: un indicador grande que actúa como semáforo de disponibilidad (21.000 errores), una lista de vigilancia de direcciones sospechosas, y un vistazo al comportamiento del catálogo &mdash;los tres frentes básicos de vigilancia, en una sola pantalla.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Un panel como este es la diferencia entre enterarse de un problema porque un cliente se queja, y detectarlo minutos después de que empiece a ocurrir. El valor no está en guardar el rastro de la actividad, sino en poder mirarlo de un vistazo y saber si algo merece atención.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Por qué esto importa más allá del ejercicio académico</h2>
+      <div class="prose">
+        <p>La tienda analizada aquí es ficticia y los datos son de práctica; nada de esto afectó a un sistema real. Pero el procedimiento &mdash;centralizar el rastro de la actividad, hacerle preguntas concretas y convertir las respuestas en un panel visual&mdash; es exactamente el que sigue cualquier equipo de seguridad o de operaciones para vigilar sistemas reales. La idea de fondo no es acumular registros; es poder mirar un panel y, en segundos, saber si algo se sale de lo esperado: un pico de errores, una dirección que concentra tráfico, un producto con un comportamiento inusual.</p>
+      </div>
+      <p class="score-line">439.456 eventos indexados &middot; 21.000 errores de acceso detectados &middot; panel de tres indicadores generado a partir de ellos</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
