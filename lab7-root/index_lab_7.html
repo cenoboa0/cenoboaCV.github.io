@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Convertir el riesgo de ciberseguridad en un plan con fecha y responsable, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa un plan de gobierno de la ciberseguridad, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+  .prose ul{max-width:680px;font-size:1.03rem;color:#242B31;margin:0 0 16px;padding-left:20px;}
+  .prose li{margin-bottom:8px;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+  .callout.metric{border-left:3px solid var(--accent-amber);}
+  .callout.metric ul{margin:0;padding-left:18px;}
+  .callout.metric li{margin-bottom:4px;font-size:.94rem;}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 07</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Convertir el riesgo de ciberseguridad en un plan con fecha y responsable</h1>
+    <p class="lede">En un ejercicio de gobierno de la ciberseguridad del Máster en Ciberseguridad de la VIU, se diseñaron dos iniciativas estratégicas completas para una empresa de comercio electrónico ficticia, traduciendo preocupaciones difusas &mdash;"nos podrían atacar", "igual no cumplimos la normativa"&mdash; en veinte proyectos concretos, cada uno con responsable, fecha y una meta que se puede comprobar.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">20</span><span class="l">Proyectos planificados</span></div>
+      <div class="stat"><span class="n">2</span><span class="l">Iniciativas estratégicas</span></div>
+      <div class="stat"><span class="n">15</span><span class="l">Metas con fecha verificable</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Por qué la ciberseguridad necesita algo más que comprar herramientas</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Instalar un antivirus o contratar un firewall no es, por sí solo, una estrategia de seguridad. El gobierno de la ciberseguridad es la disciplina que decide, de forma explícita y por escrito, quién es responsable de cada riesgo, qué se compromete la organización a hacer al respecto, en qué plazo, y cómo se va a comprobar si funcionó.</p>
+        <p style="margin:0;">Este ejercicio construyó, con esa lógica, dos planes completos para una empresa ficticia de comercio electrónico: uno centrado en proteger los datos de sus clientes, y otro en preparar tanto su infraestructura como a su personal para el día en que algo falle.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="iniciativa1">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Iniciativa 1 &mdash; Gobernanza de Datos</p>
+        <h2 class="section-title">Poner bajo control los datos de los clientes, antes de que un descuido se convierta en multa</h2>
+        <div class="prose">
+          <p>Una empresa de comercio electrónico maneja grandes volúmenes de datos personales y financieros, repartidos entre oficinas, servidores propios y servicios en la nube. Sin un marco formal que diga qué datos existen, dónde están y quién puede acceder a ellos, esa dispersión genera dos problemas a la vez: hace más probable una fuga de información, y hace mucho más difícil demostrar &mdash;ante un regulador, un auditor o un cliente&mdash; que la empresa cumple con normativas de protección de datos como el RGPD europeo o los estándares de seguridad de pagos con tarjeta.</p>
+        </div>
+        <figure>
+          <img src="lab7-assets/iniciativa1-ficha.jpg" alt="Ficha estratégica de la Iniciativa 1: líneas estratégicas, objetivos, doce proyectos con fechas de inicio y fin, y ocho métricas con meta verificable">
+          <figcaption>La ficha completa de la iniciativa: doce proyectos con fecha de inicio y fin, y ocho métricas con una meta concreta y verificable para cada una.</figcaption>
+        </figure>
+        <ul class="prose" style="margin-top:22px;">
+          <li><strong>Clasificar la información</strong> según su nivel de sensibilidad, para saber qué datos merecen más protección que otros.</li>
+          <li><strong>Un inventario de qué sistemas guardan información crítica</strong>, con un responsable asignado a cada uno &mdash;no basta con saber que el dato existe, alguien tiene que responder por él.</li>
+          <li><strong>Una herramienta que impide la fuga de información</strong> a través de correo, USB o servicios en la nube sin autorización.</li>
+          <li><strong>Un programa de formación</strong> para que el personal que maneja datos personales sepa hacerlo de forma segura y conforme a la ley.</li>
+        </ul>
+        <div class="callout biz">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>Para un negocio online, una fuga de datos no es solo un problema técnico: normativas como el RGPD pueden imponer sanciones económicas directas, y perder la confianza de los clientes después de un incidente suele costar más, a largo plazo, que la multa misma.</p>
+        </div>
+        <div class="callout metric">
+          <p class="ctitle">Ejemplos de metas concretas del plan</p>
+          <ul>
+            <li>Cero incidentes críticos de acceso no autorizado a datos de clientes, con tendencia anual decreciente.</li>
+            <li>95% de las solicitudes de derechos de los clientes sobre sus propios datos resueltas en menos de 15 días hábiles.</li>
+            <li>100% de las brechas de datos evaluadas formalmente en menos de 24 horas, para cumplir los plazos legales de notificación.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="iniciativa2">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Iniciativa 2 &mdash; Continuidad Operativa y Factor Humano</p>
+        <h2 class="section-title">Preparar tanto la infraestructura como a las personas para el día en que algo falle</h2>
+        <div class="prose">
+          <p>La misma empresa opera siete oficinas y un centro de datos propio, pero su red interna no está dividida en compartimentos &mdash;lo que significa que un problema en un solo punto puede propagarse al resto&mdash;, nunca se ha comprobado de verdad si podría recuperar su operación tras un incidente grave, y su equipo técnico no cuenta con formación específica frente al nivel de amenaza actual. Son dos vulnerabilidades distintas que se refuerzan entre sí: una técnica y una humana.</p>
+        </div>
+        <figure>
+          <img src="lab7-assets/iniciativa2-ficha.jpg" alt="Ficha estratégica de la Iniciativa 2: líneas estratégicas, objetivos, ocho proyectos con fechas de inicio y fin, y ocho métricas con meta verificable">
+          <figcaption>La ficha de la segunda iniciativa: ocho proyectos, desde la segmentación de red hasta la capacitación del personal de IT, cada uno con su fecha y su métrica.</figcaption>
+        </figure>
+        <ul class="prose" style="margin-top:22px;">
+          <li><strong>Dividir la red interna en compartimentos separados</strong>, para que un problema en una oficina no se propague automáticamente a las demás.</li>
+          <li><strong>Probar de verdad la recuperación ante un incidente grave</strong>, en lugar de asumir que el plan funcionará cuando llegue el momento.</li>
+          <li><strong>Exigir un segundo factor de verificación</strong> para acceder a cualquier sistema administrativo, más allá de la contraseña.</li>
+          <li><strong>Simulacros periódicos de phishing</strong>, para entrenar al personal frente al tipo de ataque más frecuente: el correo malicioso.</li>
+          <li><strong>Un plan escrito de respuesta a incidentes</strong> que defina, antes de que ocurra una crisis, quién decide y quién actúa.</li>
+        </ul>
+        <div class="callout biz">
+          <p class="ctitle">Por qué importa para una empresa</p>
+          <p>La mayoría de los incidentes graves de seguridad no empiezan con una vulnerabilidad técnica sofisticada, sino con una persona que hace clic en el lugar equivocado. Invertir en la preparación de las personas es tan parte de la seguridad como invertir en la tecnología.</p>
+        </div>
+        <div class="callout metric">
+          <p class="ctitle">Ejemplos de metas concretas del plan</p>
+          <ul>
+            <li>Tiempo de recuperación verificado en menos de 4 horas, comprobado en un simulacro real de restauración completa.</li>
+            <li>Tasa de éxito de los simulacros de phishing por debajo del 5% hacia el cierre del año.</li>
+            <li>100% de los accesos administrativos protegidos con doble factor de autenticación.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Por qué esto importa más allá del ejercicio académico</h2>
+      <div class="prose">
+        <p>La empresa de este ejercicio es ficticia, pero el ejercicio en sí es exactamente el que realiza el área de seguridad de cualquier organización real antes de invertir en herramientas técnicas: decidir quién es dueño de cada riesgo, comprometerse con fechas concretas, y definir de antemano cómo se va a medir el éxito. Sin ese nivel de gobierno, hasta la mejor herramienta de seguridad técnica termina siendo un gasto sin dueño y sin forma de comprobar si realmente funcionó.</p>
+      </div>
+      <p class="score-line">20 proyectos planificados &middot; 2 iniciativas estratégicas &middot; 15 métricas con meta y fecha límite verificable</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
