@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decidir en qué invertir primero en ciberseguridad, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Qué significa para una empresa priorizar la inversión en ciberseguridad mediante un análisis de costo-beneficio, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 880px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:640px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:680px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);background:#fff;}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:680px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+
+  /* playground panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+  .cta-secondary{
+    font-family:var(--mono);font-size:.82rem;color:var(--accent-red);text-decoration:none;
+    border-bottom:1px solid var(--accent-red);
+  }
+  .cta-secondary:hover{color:var(--ink);border-color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">ANEXO DEL CASO 08</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS &middot; CONTINUACIÓN DEL CASO 07</p>
+    <h1 class="name">Decidir en qué invertir primero, cuando no se puede hacer todo a la vez</h1>
+    <p class="lede">Este ejercicio retoma las dos iniciativas de gobierno de la ciberseguridad del Caso 07 y les pone precio y beneficio a sus veinte proyectos, para responder la pregunta que de verdad decide un presupuesto: si solo se puede empezar por una, ¿cuál primero?</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">$42.085</span><span class="l">Costo Iniciativa 1</span></div>
+      <div class="stat"><span class="n">$109.000</span><span class="l">Costo Iniciativa 2</span></div>
+      <div class="stat"><span class="n">I1</span><span class="l">Iniciativa recomendada primero</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Por qué un plan de seguridad también necesita un análisis financiero</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Tener un buen plan no basta si nadie puede decir cuánto cuesta y qué se obtiene a cambio. Este ejercicio tomó los veinte proyectos de las dos iniciativas ya definidas y, para cada uno, estimó su costo &mdash;en jornadas de consultoría especializada, tecnología y licenciamiento&mdash; y puntuó su beneficio esperado contra una lista fija de resultados de negocio: cumplimiento normativo, reducción de riesgo, capacidad de respuesta.</p>
+        <p style="margin:0;">Eso convirtió una lista de buenas ideas en algo que un comité de presupuesto puede realmente comparar y priorizar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso1">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 1</p>
+        <h2 class="section-title">Ponerle precio a cada proyecto, uno por uno</h2>
+        <div class="prose">
+          <p>El costo de cada proyecto se estimó usando una tarifa de referencia de consultoría especializada (275 USD por jornada), más estimaciones de mercado para tecnología, licenciamiento y servicios gestionados. El resultado, sumado por iniciativa, deja una diferencia difícil de ignorar: la Iniciativa 1 (Gobernanza de Datos) cuesta 42.085 USD en total; la Iniciativa 2 (Continuidad Operativa) cuesta 109.000 USD &mdash;casi el triple.</p>
+        </div>
+        <figure>
+          <img src="lab8-assets/costo-por-proyecto.jpg" alt="Dos gráficos de barras comparando el costo de cada proyecto en la Iniciativa 1 (Gobernanza de Datos) y la Iniciativa 2 (Continuidad Operativa)">
+          <figcaption>El costo desglosado proyecto por proyecto en ambas iniciativas. Un solo proyecto de la Iniciativa 2 &mdash;el plan de recuperación ante desastres&mdash; cuesta por sí solo 30.000 USD, más que toda la Iniciativa 1 en varios de sus componentes combinados.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Conocer no solo el costo total, sino qué proyecto concreto lo dispara, permite negociar, escalonar en el tiempo o recortar un plan de forma quirúrgica, en lugar de tener que aceptarlo o rechazarlo como un bloque único.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso2">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Paso 2</p>
+        <h2 class="section-title">Puntuar el beneficio de cada proyecto, no solo su costo</h2>
+        <div class="prose">
+          <p>Un proyecto barato no es automáticamente una buena inversión, y uno caro no es automáticamente malo &mdash;los dos números solo significan algo cuando se leen juntos. Cada proyecto se puntuó comparándolo contra una lista fija de beneficios esperados y contando cuántos de ellos realmente cubre. El resultado ubica cada proyecto en un mapa de costo contra beneficio.</p>
+        </div>
+        <figure>
+          <img src="lab8-assets/matriz-iniciativa1.jpg" alt="Gráfico de burbujas mostrando el costo y el beneficio cuantificado de cada uno de los doce proyectos de la Iniciativa 1">
+          <figcaption>Cada burbuja es un proyecto de la Iniciativa 1, ubicado por su costo (eje vertical) y su beneficio cuantificado (eje horizontal). Los que aparecen abajo a la derecha &mdash;como P11 (Monitoreo) y P9 (DLP)&mdash; combinan beneficio muy alto con costo bajo.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>La prevención de fuga de datos y el programa de monitoreo y cumplimiento obtuvieron juntos la puntuación de beneficio más alta de todo el análisis, costando menos de 6.500 USD combinados &mdash;exactamente el tipo de proyecto "barato y de alto impacto" que una empresa no debería posponer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paso3">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Paso 3</p>
+        <h2 class="section-title">Cruzar ambos datos para decidir qué financiar primero</h2>
+        <div class="prose">
+          <p>Con el costo y el beneficio ya puntuados, colocar cada proyecto en un mismo gráfico &mdash;costo en un eje, beneficio en el otro&mdash; hace visible la prioridad de un vistazo: lo que cae en la zona de beneficio alto y costo contenido va primero, sin importar a cuál de las dos iniciativas pertenezca.</p>
+        </div>
+        <figure>
+          <img src="lab8-assets/matriz-iniciativa2.jpg" alt="Gráfico de burbujas mostrando el costo y el beneficio normalizado de los ocho proyectos de la Iniciativa 2">
+          <figcaption>El mismo ejercicio aplicado a la Iniciativa 2: la segmentación de red (P1) y el plan de respuesta a incidentes (P4), a la derecha del gráfico, entregan más beneficio que su costo por sí solo sugeriría.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Este mismo gráfico mostró que, dentro de la Iniciativa 2, el proyecto más caro (el respaldo y recuperación ante desastres, 30.000 USD) obtuvo una puntuación de beneficio más baja que proyectos mucho más económicos &mdash;lo que no significa que sea innecesario, sino que ordena en qué secuencia conviene invertir primero.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">La recomendación final</p>
+      <h2 class="section-title">Por qué se prioriza la gobernanza de datos primero</h2>
+      <div class="prose">
+        <p>Comparando ambas iniciativas como un todo, el análisis recomienda priorizar la Iniciativa 1 &mdash;Gobernanza de Datos&mdash; por tres razones concretas: cuesta aproximadamente un tercio de lo que cuesta la Iniciativa 2, varios de sus componentes más económicos obtuvieron la puntuación de beneficio más alta de todo el análisis, y responde directamente a una obligación normativa con plazos legales concretos que ninguna otra iniciativa cubre. Además, actúa como base: varios de sus controles &mdash;como clasificar qué información es sensible&mdash; son un requisito previo del que dependerán, tarde o temprano, incluso los proyectos de la propia Iniciativa 2.</p>
+      </div>
+      <p class="score-line">$42.085 costo Iniciativa 1 &middot; $109.000 costo Iniciativa 2 &middot; Iniciativa 1 recomendada como prioridad</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+        <a class="cta-secondary" href="https://cenoboa0.github.io/cenoboaCV.github.io/lab7-root/index_lab_7.html">Ver el Caso 07 &#8599;</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
