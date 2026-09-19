@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rediseñar la red de una empresa de medios, explicado sin tecnicismos — Carlos Eduardo Noboa Guerrero</title>
+<meta name="description" content="Caso práctico Grupo Lector: rediseño de arquitectura de seguridad y priorización de mejoras por riesgo y costo, explicado en lenguaje llano para perfiles no técnicos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12181D;
+    --paper:#E7E8E2;
+    --paper-2:#DBDCD4;
+    --panel:#F3F3EF;
+    --surface-dark:#12181D;
+    --surface-dark-2:#1B232B;
+    --accent-amber:#B9800E;
+    --accent-teal:#1E7F72;
+    --accent-red:#9C3B2E;
+    --muted:#5B6570;
+    --rule:#c7c9c0;
+    --display: 'Barlow Semi Condensed', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'Inter', sans-serif;
+    --maxw: 960px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--accent-amber);color:#fff;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px;}
+
+  /* top bar */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:var(--surface-dark);border-bottom:2px solid var(--ink);
+  }
+  .topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .topbar a.back{
+    font-family:var(--mono);font-size:.76rem;letter-spacing:.04em;
+    color:#EDEEEA;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid #3A444C;border-radius:999px;padding:6px 14px;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .topbar a.back:hover{border-color:var(--accent-amber);color:var(--accent-amber);background:rgba(185,128,14,.1);}
+  .topbar .label{font-family:var(--mono);font-size:.72rem;color:#8A9299;letter-spacing:.06em;}
+
+  /* hero */
+  header.cover{background:var(--surface-dark);color:#EDEEEA;border-bottom:2px solid var(--ink);position:relative;overflow:hidden;}
+  header.cover::before{
+    content:"";position:absolute;inset:0;
+    background-image:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0px,rgba(255,255,255,.035) 1px,transparent 1px,transparent 26px);
+    pointer-events:none;
+  }
+  .cover-inner{padding:56px 0 48px;position:relative;}
+  .case-id{font-family:var(--mono);font-size:.76rem;color:var(--accent-amber);letter-spacing:.1em;margin:0 0 18px;}
+  h1.name{
+    font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.4vw,3.1rem);
+    line-height:1.04;margin:0 0 20px;letter-spacing:.01em;
+  }
+  p.lede{font-size:1.12rem;color:#C9CDC7;max-width:700px;margin:0 0 28px;}
+  .stat-row{display:flex;flex-wrap:wrap;gap:28px;}
+  .stat{font-family:var(--mono);}
+  .stat .n{font-family:var(--display);font-weight:800;font-size:1.8rem;color:#fff;display:block;line-height:1;}
+  .stat .l{font-size:.72rem;color:#9BA3AB;text-transform:uppercase;letter-spacing:.06em;}
+
+  /* generic sections */
+  section{padding:56px 0;border-bottom:1px solid var(--rule);}
+  .eyebrow{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;margin:0 0 10px;}
+  h2.section-title{
+    font-family:var(--display);font-weight:700;text-transform:uppercase;
+    font-size:clamp(1.4rem,3vw,1.9rem);margin:0 0 20px;letter-spacing:.01em;
+  }
+  .prose{max-width:720px;font-size:1.03rem;color:#242B31;}
+  .prose p{margin:0 0 16px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  figure{margin:26px 0 0;}
+  figure img{width:100%;display:block;border-radius:3px;border:1px solid var(--ink);background:#fff;}
+  figcaption{
+    font-family:var(--mono);font-size:.78rem;color:var(--muted);
+    margin-top:10px;line-height:1.5;
+  }
+
+  /* step blocks */
+  .step{border-left:4px solid var(--rule);padding-left:26px;}
+  .step.c-teal{border-left-color:var(--accent-teal);}
+  .step.c-amber{border-left-color:var(--accent-amber);}
+  .step.c-red{border-left-color:var(--accent-red);}
+  .step .eyebrow.c-teal{color:var(--accent-teal);}
+  .step .eyebrow.c-amber{color:var(--accent-amber);}
+  .step .eyebrow.c-red{color:var(--accent-red);}
+
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-radius:3px;
+    padding:18px 20px;margin-top:22px;max-width:720px;
+  }
+  .callout .ctitle{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);margin:0 0 8px;
+  }
+  .callout p{margin:0;font-size:.98rem;}
+  .callout.biz{border-left:3px solid var(--accent-teal);}
+  .callout.risk{border-left:3px solid var(--accent-red);}
+
+  /* platform panel */
+  .platform-panel{
+    background:var(--surface-dark);color:#EDEEEA;border-radius:4px;padding:30px 30px 26px;
+  }
+  .platform-panel p{color:#C9CDC7;}
+
+  /* data tables */
+  .table-wrap{margin-top:20px;overflow-x:auto;max-width:100%;}
+  table.data-table{
+    border-collapse:collapse;width:100%;min-width:560px;font-size:.9rem;background:var(--panel);
+  }
+  table.data-table caption{
+    font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);text-align:left;margin-bottom:8px;caption-side:top;
+  }
+  table.data-table th{
+    font-family:var(--mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;
+    background:var(--surface-dark);color:#EDEEEA;text-align:left;padding:10px 12px;
+  }
+  table.data-table td{padding:9px 12px;border-bottom:1px solid var(--rule);vertical-align:top;}
+  table.data-table tr:last-child td{border-bottom:none;}
+  table.data-table tr.total td{font-weight:700;border-top:2px solid var(--ink);background:var(--paper-2);}
+  .tag{
+    display:inline-block;font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;text-transform:uppercase;
+    padding:2px 8px;border-radius:999px;border:1.5px solid currentColor;
+  }
+  .tag.muy-alta{color:var(--accent-red);}
+  .tag.alta{color:var(--accent-amber);}
+  .tag.media{color:var(--accent-teal);}
+  .tag.bajo{color:var(--muted);}
+  .tag.medio{color:var(--accent-amber);}
+
+  /* closing */
+  .closing{background:var(--paper-2);}
+  .score-line{
+    font-family:var(--mono);font-size:.86rem;color:var(--muted);
+    margin-top:22px;padding-top:18px;border-top:1px dashed var(--rule);
+  }
+
+  .cta-row{margin-top:34px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;}
+  .cta-primary{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--ink);color:#fff;text-decoration:none;
+    font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em;
+    font-size:1rem;padding:14px 26px;border-radius:3px;border:1.5px solid var(--ink);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cta-primary:hover{background:transparent;color:var(--ink);}
+
+  footer{background:var(--surface-dark);color:#8A9299;padding:30px 0;}
+  footer p{font-family:var(--mono);font-size:.74rem;margin:0;line-height:1.6;}
+
+  @media (max-width:640px){
+    .step{padding-left:18px;}
+    .stat-row{gap:20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="back" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+    <span class="label">CASO PRÁCTICO — GRUPO LECTOR</span>
+  </div>
+</div>
+
+<header class="cover">
+  <div class="wrap cover-inner">
+    <p class="case-id">LECTURA PARA PERFILES NO TÉCNICOS</p>
+    <h1 class="name">Rediseñar la red de una empresa de medios para que un incidente no se propague solo</h1>
+    <p class="lede">Caso práctico sobre Grupo Lector, una corporación de prensa, televisión y producción audiovisual. A partir de un análisis de riesgos completo, se rediseñó su red interna y se ordenaron nueve mejoras concretas según el riesgo que resuelven y lo que cuestan, con una inversión total estimada de 213.000 USD.</p>
+    <div class="stat-row">
+      <div class="stat"><span class="n">9</span><span class="l">Tareas de mejora</span></div>
+      <div class="stat"><span class="n">$213.000</span><span class="l">Inversión total estimada</span></div>
+      <div class="stat"><span class="n">3</span><span class="l">Tareas de prioridad muy alta</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="entorno">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-amber);">El punto de partida</p>
+      <h2 class="section-title">Una empresa que creció rápido, y una red que creció con ella sin orden</h2>
+      <div class="platform-panel">
+        <p style="margin:0 0 14px;">Grupo Lector es una corporación con sede en Barcelona dedicada a la prensa, la televisión y la producción de contenido audiovisual. Como ocurre con muchas empresas que crecen a base de adquirir otras compañías, su infraestructura tecnológica terminó siendo heterogénea y descentralizada: distintas plataformas, distintas aplicaciones de negocio y distintos accesos remotos, todo coexistiendo sin una administración unificada.</p>
+        <p style="margin:0;">Ya contaba con controles razonables &mdash;firewalls con redundancia, un directorio de usuarios centralizado, una zona separada para los servicios publicados a internet&mdash;. El problema no era la ausencia total de seguridad, sino que esa seguridad tenía huecos concretos y bien identificables.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="as-is">
+    <div class="wrap">
+      <div class="step c-red">
+        <p class="eyebrow c-red">Cómo estaba la red</p>
+        <h2 class="section-title">Todo conectado con todo, dentro de la misma red</h2>
+        <div class="prose">
+          <p>El diagrama siguiente resume la arquitectura de partida. Tras el perímetro de seguridad (firewall, VPN, antivirus), las tres áreas de negocio &mdash;Prensa, Productora y TV&mdash; comparten literalmente la misma red interna, sin ninguna pared que las separe. A eso se suman salidas a internet independientes por fibra o ADSL, que no pasan por ese mismo perímetro de seguridad.</p>
+        </div>
+        <figure>
+          <img src="lab9-assets/arquitectura-as-is.jpg" alt="Diagrama de la arquitectura actual de Grupo Lector: un perímetro de seguridad único frente a una red interna plana que agrupa Prensa, Productora y TV sin separación, más salidas a internet independientes">
+          <figcaption>La arquitectura de partida (AS-IS): un perímetro de seguridad razonable, pero una única red interna sin divisiones entre áreas de negocio, y salidas a internet que evitan ese mismo perímetro.</figcaption>
+        </figure>
+        <div class="callout risk">
+          <p class="ctitle">Por qué esto es un problema</p>
+          <p>Si un solo equipo de Prensa se ve comprometido &mdash;por ejemplo, con un correo malicioso&mdash;, no hay ninguna barrera interna que impida que ese problema salte directamente a los sistemas de Productora o de TV. Es como si, dentro de un edificio con una sola puerta de entrada vigilada, todas las oficinas interiores no tuvieran puertas propias.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="to-be">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Cómo queda la red</p>
+        <h2 class="section-title">La misma empresa, ahora dividida en compartimentos con una razón cada uno</h2>
+        <div class="prose">
+          <p>La arquitectura propuesta no sustituye lo que ya existía: lo reorganiza en capas, cada una con un propósito concreto. En el perímetro, un doble firewall trabaja en pareja para que la caída de uno no deje a la empresa sin protección. Justo detrás, la red se divide en compartimentos independientes &mdash;uno por cada área de negocio, y otros separados para dispositivos personales o de terceros&mdash;, de forma que ninguno puede hablar directamente con los demás. Los sistemas más sensibles &mdash;el sistema de gestión, el directorio de usuarios, el correo, las bases de datos&mdash; quedan además detrás de un segundo firewall propio, como una caja fuerte dentro de la caja fuerte. Y por encima de todo eso, una capa de vigilancia centralizada reúne los registros de toda la red y los revisa de forma continua.</p>
+        </div>
+        <figure>
+          <img src="lab9-assets/arquitectura-to-be.jpg" alt="Diagrama de la arquitectura de seguridad propuesta para Grupo Lector, organizada en zonas: perimetral, core, VLANs por área de negocio, servidores críticos protegidos, y monitorización con SIEM y SOC">
+          <figcaption>La arquitectura propuesta (TO-BE): perímetro reforzado, compartimentos separados por área de negocio, una zona blindada para los sistemas más sensibles, y una capa de vigilancia permanente sobre todo el conjunto.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Incluso si un área queda comprometida, el resto sigue funcionando de forma aislada &mdash;como los compartimentos estancos de un barco, diseñados para que una vía de agua en uno no hunda el barco entero. Y la capa de vigilancia significa que, por primera vez, alguien se entera de un incidente en minutos, no semanas después.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="priorizacion">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Decidir por dónde empezar</p>
+        <h2 class="section-title">Ordenar las nueve mejoras según el riesgo que resuelven, no según lo que parezca más urgente</h2>
+        <div class="prose">
+          <p>Rediseñar la red en el papel es solo la mitad del trabajo: hay que decidir en qué orden se construye. Cada una de las nueve mejoras se comparó contra los riesgos ya identificados en el análisis previo, y se le asignó una prioridad. Tres de ellas &mdash;dividir la red por áreas de negocio, centralizar la salida a internet, y poner el acceso remoto detrás del firewall con verificación en dos pasos&mdash; resuelven, exactamente, las tres debilidades más urgentes de toda la arquitectura.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <caption>Priorización de tareas de mejora según el nivel de riesgo</caption>
+            <thead>
+              <tr><th>Cód.</th><th>Tarea</th><th>Debilidad que resuelve</th><th>Prioridad</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>P1</td><td>Segmentación en VLAN por negocio</td><td>Ausencia de segmentación entre negocios</td><td><span class="tag muy-alta">Muy alta</span></td></tr>
+              <tr><td>P2</td><td>Proxy de salida único con reglas por segmento</td><td>Salidas a internet fuera del perímetro protegido</td><td><span class="tag muy-alta">Muy alta</span></td></tr>
+              <tr><td>P3</td><td>Concentrador VPN detrás del firewall, con AD y MFA</td><td>Acceso VPN sin inspección del firewall</td><td><span class="tag muy-alta">Muy alta</span></td></tr>
+              <tr><td>P4</td><td>Firewall interno para ERP, Directorio Activo y correo</td><td>Sistemas críticos sin capa de protección adicional</td><td><span class="tag alta">Alta</span></td></tr>
+              <tr><td>P5</td><td>Clúster de firewall perimetral en alta disponibilidad</td><td>Punto único de fallo en el perímetro</td><td><span class="tag alta">Alta</span></td></tr>
+              <tr><td>P6</td><td>Clúster de switches core en alta disponibilidad</td><td>Punto único de fallo en la conmutación central</td><td><span class="tag media">Media</span></td></tr>
+              <tr><td>P7</td><td>Zona DMZ para servicios públicos</td><td>Publicación directa de servicios hacia internet</td><td><span class="tag alta">Alta</span></td></tr>
+              <tr><td>P8</td><td>Plataforma SIEM integrada con los dispositivos de seguridad</td><td>Ausencia de monitoreo centralizado</td><td><span class="tag alta">Alta</span></td></tr>
+              <tr><td>P9</td><td>Sistema NAC y políticas de gestión para BYOD y terceros</td><td>Dispositivos sin control centralizado</td><td><span class="tag media">Media</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout biz">
+          <p class="ctitle">Para qué sirve esto en una empresa</p>
+          <p>Ordenar por riesgo, y no por lo primero que se ocurra, significa que el dinero y el tiempo se gastan primero en tapar los huecos que de verdad podrían costarle caro a la empresa, dejando lo importante-pero-no-urgente para una segunda fase.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="costos">
+    <div class="wrap">
+      <div class="step c-teal">
+        <p class="eyebrow c-teal">Ponerle precio a cada tarea</p>
+        <h2 class="section-title">Nueve mejoras, un presupuesto de 213.000 USD</h2>
+        <div class="prose">
+          <p>Cada tarea se costeó por separado, considerando equipos, licenciamiento, implementación y el primer año de soporte cuando corresponde. La plataforma de monitorización centralizada (SIEM más un equipo dedicado a vigilarla, el SOC) concentra, con diferencia, la mayor inversión individual &mdash;porque es la única pieza de todo el portafolio que aporta capacidad real de detectar un incidente mientras ocurre, en lugar de solo prevenirlo.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <caption>Estimación económica por tarea</caption>
+            <thead>
+              <tr><th>Cód.</th><th>Tarea</th><th>Costo estimado</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>P1</td><td>Segmentación VLAN</td><td>$8.000</td></tr>
+              <tr><td>P2</td><td>Proxy de salida único</td><td>$10.000</td></tr>
+              <tr><td>P3</td><td>VPN detrás del firewall, con AD y MFA</td><td>$15.000</td></tr>
+              <tr><td>P4</td><td>Firewall interno para servidores críticos</td><td>$20.000</td></tr>
+              <tr><td>P5</td><td>Firewall perimetral en clúster HA</td><td>$45.000</td></tr>
+              <tr><td>P6</td><td>Switch core en clúster HA</td><td>$18.000</td></tr>
+              <tr><td>P7</td><td>Zona DMZ formal</td><td>$12.000</td></tr>
+              <tr><td>P8</td><td>Plataforma SIEM más SOC</td><td>$60.000</td></tr>
+              <tr><td>P9</td><td>Sistema NAC para BYOD y terceros</td><td>$25.000</td></tr>
+              <tr class="total"><td colspan="2">Total</td><td>$213.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="costo-beneficio">
+    <div class="wrap">
+      <div class="step c-amber">
+        <p class="eyebrow c-amber">Cruzar costo y beneficio</p>
+        <h2 class="section-title">Lo más urgente no siempre es lo más caro</h2>
+        <div class="prose">
+          <p>Cada tarea se comparó también contra una lista fija de beneficios esperados &mdash;reduce el movimiento lateral, elimina un punto único de fallo, protege los sistemas críticos, entre otros&mdash; y se contó cuántos de ellos cubre realmente. Esa puntuación, cruzada con el costo, confirma algo que ya sugería la tabla de prioridades: las tres tareas más urgentes (P1, P2 y P3) están entre las más económicas de todo el portafolio.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <caption>Resultados de priorización, costo y beneficio</caption>
+            <thead>
+              <tr><th>Cód.</th><th>Costo</th><th>N.º de beneficios que cumple</th><th>Beneficio</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>P1</td><td>$8.000</td><td>2</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P2</td><td>$10.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P3</td><td>$15.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P4</td><td>$20.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P5</td><td>$45.000</td><td>4</td><td><span class="tag medio">Medio</span></td></tr>
+              <tr><td>P6</td><td>$18.000</td><td>2</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P7</td><td>$12.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P8</td><td>$60.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+              <tr><td>P9</td><td>$25.000</td><td>3</td><td><span class="tag bajo">Bajo</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure>
+          <img src="lab9-assets/matriz-costo-beneficio.jpg" alt="Gráfico de burbujas mostrando el costo estimado en el eje vertical y el beneficio normalizado en el eje horizontal para las nueve tareas de mejora de Grupo Lector">
+          <figcaption>Cada burbuja es una tarea, ubicada por su costo (eje vertical) y su beneficio normalizado (eje horizontal); el tamaño de la burbuja también representa el costo. P1, P2 y P3, abajo a la izquierda, muestran el mejor retorno relativo: poco costo para resolver el riesgo más urgente.</figcaption>
+        </figure>
+        <div class="callout biz">
+          <p class="ctitle">Un matiz importante</p>
+          <p>Que la plataforma SIEM (P8) obtenga una puntuación de beneficio relativamente baja en esta tabla no la vuelve prescindible: es la única tarea de las nueve capaz de detectar un incidente mientras sucede, algo que ninguna otra tarea del portafolio cubre. Un número bajo en esta escala señala un beneficio concentrado en un solo criterio de alto valor, no una tarea de poca importancia.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing" id="resumen">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--accent-red);">En resumen</p>
+      <h2 class="section-title">Reorganizar lo que ya existe, antes de comprar algo nuevo</h2>
+      <div class="prose">
+        <p>Grupo Lector no necesita sustituir su infraestructura: necesita reorganizarla y completarla de forma priorizada según el riesgo real de cada componente. Las tres tareas que resuelven las debilidades más urgentes representan poco más del 15% de la inversión total, lo que confirma que la prioridad de ejecución depende del riesgo que cada tarea reduce, no del tamaño de su presupuesto.</p>
+      </div>
+      <p class="score-line">9 tareas de mejora &middot; $213.000 de inversión total estimada &middot; 3 tareas de prioridad muy alta concentran ~15% del presupuesto</p>
+      <div class="cta-row">
+        <a class="cta-primary" href="https://cenoboa0.github.io/cenoboaCV.github.io/index.html">&larr; Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Elaborado por Carlos E. Noboa Guerrero &mdash; Máster en Ciberseguridad, VIU.</p>
+  </div>
+</footer>
+
+</body>
+</html>
